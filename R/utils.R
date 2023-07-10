@@ -23,9 +23,16 @@ mpitb.measure <- function(X){
 #'
 #' @export
 as.data.frame.mpitb_measure <- function(x, row.names = NULL, optional = FALSE, ...) {
-  lst.k <- lapply(x, FUN = convert2data.frame)
-  mpitb_measure.df <- do.call("rbind", lst.k)
+  list.k <- lapply(x, FUN = convert2data.frame)
+  mpitb_measure.df <- do.call("rbind", list.k)
   mpitb_measure.df
+}
+
+as.data.frame.mpitb_est <- function(x, row.names = NULL, optional = FALSE, ...) {
+  list.measures <- lapply(x, FUN = as.data.frame)
+  # add column with names of the measure
+  mpitb_est.df <- do.call("rbind", list.measures)
+  mpitb_est.df
 }
 
 convert2data.frame <- function(X) {

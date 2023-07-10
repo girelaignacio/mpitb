@@ -27,12 +27,13 @@ mpitb.set <- function(data, indicators, K, weights, over = NULL,
   if (missing(K)) {
     stop("Error: Poverty cut-off value (K) not found")
   }
+
   if (!is.null(over)) {
     if (!all(over %in% colnames(data))){
       stop("Error: groups not found in data")
     }
-    over <- c("national", over)
-  } else { over <- c("national") }
+    over <- c("Overall", over)
+  } else { over <- c("Overall") }
 
   # check if data is a survey.design object
   if (!inherits(data, "survey.design")) {
@@ -54,7 +55,7 @@ mpitb.set <- function(data, indicators, K, weights, over = NULL,
   #.transformation of arguments and variables ####
   K <- change.K.scale(K)
 
-  data[,"national"] <- "national"# <- transform(data, national = "national")
+  data[,"Overall"] <- "Overall"
 
   # Create the deprivations and weighted deprivations matrix ####
   # G0 <- matrix: Deprivation Matrix
