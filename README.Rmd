@@ -28,6 +28,7 @@ You can install the development version of mpitb from [GitHub](https://github.co
 # install.packages("devtools")
 devtools::install_github("girelaignacio/mpitb")
 ```
+This process may take time the first time. 
 
 ## Example
 
@@ -38,15 +39,15 @@ This is a basic example which shows you how calculate the Multidimensional Pover
 Load the `"swz_mics14"` dataset from the package. See the structure of the variables. 
 
 ```{r example}
-#library(mpitb)
+library(mpitb)
 ## Use swz_mics14 data
-#data <- swz_mics14
+head(swz_mics14)
 ```
 
 We are going to estimate poverty disaggregated by different population subgroups: Region and Area. Please note that if we see the structure of this data, `Region` and ``Area`` are `Factor`.
 
 ```{r strdata}
-# str(swz_mics14)
+str(swz_mics14)
 ```
 
 #### The first step
@@ -55,19 +56,26 @@ Specify the household survey design with `survey` R package and other arguments 
 
 ```{r step1}
 ## Configurate the survey design 
-# data <- survey::svydesign(id=~psu, weights = ~hhweight, strata = ~stratum, data = swz_mics14)
-# class(data)
+data <- survey::svydesign(id=~PSU, weights = ~Weight , strata = ~Strata, data = swz_mics14)
+class(data)
 ```
 
 #### The second step
 
-Set up the data and parameters for our estimation of the MPI with `mpitb.set` function.
+Specify the set of parameters for our estimation of the MPI with `mpitb.set` function. This function create a object of `mpitb_set` class containing all the information that will be used in further functions for calculating different AF measures.
+
+Apart from our `data` object, parameters of `mpitb.set` function include `indicators`, `cutoffs`, `weights` and other optional arguments: `over` is the vector of the groups, `name` and `desc` are for specifying a personal name and description of your setting. 
+
 ```{r step2}
-#set1 <- mpitb.set(data, indicators)
-#print(set1)
+indicators <- c("Water","Assets","School","Nutrition")
+weights <- c(1/3,1/3,1/6,1/6)
+cutoff <- c(25)
+over <- c("Region","Area")
+set <- mpitb.set(data, indicators, cutoff, weights, over, name = "SWZ2014 Example", desc = "This is an example taken from the OPHI Summer School 2022")
+print(set)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+It is also possible to view a summery of our settings where further information can be observed such as the uncensored headcount ratios of the indicators. 
 
 ```{r structure set1}
 #summary(set1)

@@ -1,3 +1,11 @@
+#' eSwatini MICS 2014 merged
+#'
+#' @name swz_mics14
+#' @docType data
+#' @author OPHI Summer School 2022
+#' @references \url{https://mics.unicef.org/surveys}
+"swz_mics14"
+
 mpitb.measure <- function(X){
   b <- stats::coef(X)
   se <- suppressWarnings(sqrt(diag(stats::vcov(X))))
