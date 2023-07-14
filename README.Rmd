@@ -62,7 +62,7 @@ class(data)
 
 #### The second step
 
-Specify the set of parameters for our estimation of the MPI with `mpitb.set` function. This function create a object of `mpitb_set` class containing all the information that will be used in further functions for calculating different AF measures.
+Specify the set of parameters for our estimation of the MPI with `mpitb.set` function. This function creates a object of `mpitb_set` class containing all the information that will be used in further functions for calculating different AF measures.
 
 Apart from our `data` object, parameters of `mpitb.set` function include `indicators`, `cutoffs`, `weights` and other optional arguments: `over` is the vector of the groups, `name` and `desc` are for specifying a personal name and description of your setting. 
 
@@ -75,7 +75,7 @@ set <- mpitb.set(data, indicators, cutoff, weights, over, name = "SWZ2014 Exampl
 print(set)
 ```
 
-It is also possible to view a summery of our settings where further information can be observed such as the uncensored headcount ratios of the indicators. 
+It is also possible to view a summery of our settings where further information can be observed such as the distribution of the population, the uncensored headcount ratios of the indicators in the whole country, etc... 
 
 ```{r structure set1}
 #summary(set1)
@@ -83,8 +83,34 @@ It is also possible to view a summery of our settings where further information 
 
 #### Estimate the Adjusted Headcount Ratio, Incidence and Intensity of Poverty
 
+Different AF measures can be calculated using `mpitb.measure` function types. For example, if the user want to calculate only the M0 measure, he/she should use `mpitb.M0` function which only takes a `"mpitb_set"` class object. Analogously, with other measures such as H, A and censored headcounts.
+
 ```{r estimate-measures}
-#M0 <- mpitb.M0(set1)
-#H <- mpitb.H(set1)
-#A <- mpitb.A(set1)
+M0 <- mpitb.M0(set)
+#H <- mpitb.H(set)
+#A <- mpitb.A(set)
+#headcounts <- mpitb.headcounts(set)
+```
+
+This functions estimate the AF measure for overall data by default and by subgroups if specified. A `mpitb_measure` class object is returned which contains the estimate and the calculated standard errors for each level of analysis taking into account the household survey design. 
+
+The structure of this object is a list of lists. The list contains the measures for different poverty cutoffs. If we calculate M0 for K = 25, M0 is a list of length 1. Each element is a list whose elements contains the estimated measures for the specified level of analysis keeping the standard errors as an `atribute` of that element. 
+
+```{r str mpitbmeasure}
+M0
+```
+
+This is quite ugly but necessary for controlling objects. Since the package is thought for beginners/intermediate R users, extensions of R base generic functions are included in the package such as `as.data.frame` which permits the user to examine the results in a more convenient way. 
+
+This makes results easier to control by the user. Once converted the `mpitb_measure` class object to `data.frame`, the user can easily filter the results by group, level, cut-off using R functions like `subset` or funtions from `tidyr` package (depending on what is more confortable to the user). Here is an example:
+
+```{r dataframe mpitbmeasure}
+M0.results <- as.data.frame(M0)
+head(M0.results)
+```
+
+In addition, if the user wants to estimate all the measures at once, she/he can use `mpitb.est` function
+
+```{r mitb.est}
+#mpitb.est(set)
 ```
