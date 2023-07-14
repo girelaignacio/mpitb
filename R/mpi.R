@@ -74,7 +74,7 @@ mpitb.H.mpitb_set <- function(object, ...){
     attr(H, "k") <- k
     output[[i]] <- H
   }
-  class(output) <- c("mpitb_A", "mpitb_measure")
+  class(output) <- c("mpitb_H", "mpitb_measure")
   output
 }
 
@@ -157,7 +157,7 @@ mpitb.headcounts.mpitb_set <- function(object, ...) {
 
 mpitb.est <- function(object, ...) UseMethod("mpitb.est", object)
 
-mpitb.est.mpitb_set <- function(object, measures = c("M","H","A","Headcounts"), ...){
+mpitb.est.mpitb_set <- function(object, measures = c("M0","H","A","Headcounts"), ...){
   estimation <- vector("list", length = length(measures))
   names(estimation) <- measures
   if ("M0" %in% measures) {estimation[["M0"]] <- mpitb.M0(object)}

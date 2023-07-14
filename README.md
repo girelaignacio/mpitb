@@ -1,12 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# mpitb
+# mpitb: a toolbox for estimating multidimensional poverty indices in R
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of mpitb is to …
+The goal of this package is to …
 
 ## Installation
 
@@ -20,36 +20,60 @@ devtools::install_github("girelaignacio/mpitb")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how calculate the
+Multidimensional Poverty Index:
+
+#### Getting started
+
+Load the `"swz_mics14"` dataset from the package. See the structure of
+the variables.
 
 ``` r
 #library(mpitb)
-## basic example code
+## Use swz_mics14 data
+#data <- swz_mics14
+```
+
+We are going to estimate poverty disaggregated by different population
+subgroups: Region and Area. Please note that if we see the structure of
+this data, `Region` and `Area` are `Factor`.
+
+``` r
+# str(swz_mics14)
+```
+
+#### The first step
+
+Specify the household survey design with `survey` R package and other
+arguments to be used in the settings of our estimation of the MPI.
+
+``` r
+## Configurate the survey design 
+# data <- survey::svydesign(id=~psu, weights = ~hhweight, strata = ~stratum, data = swz_mics14)
+# class(data)
+```
+
+#### The second step
+
+Set up the data and parameters for our estimation of the MPI with
+`mpitb.set` function.
+
+``` r
+#set1 <- mpitb.set(data, indicators)
+#print(set1)
 ```
 
 What is special about using `README.Rmd` instead of just `README.md`?
 You can include R chunks like so:
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+#summary(set1)
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this. You could also
-use GitHub Actions to re-render `README.Rmd` every time you push. An
-example workflow can be found here:
-<https://github.com/r-lib/actions/tree/v1/examples>.
+#### Estimate the Adjusted Headcount Ratio, Incidence and Intensity of Poverty
 
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+``` r
+#M0 <- mpitb.M0(set1)
+#H <- mpitb.H(set1)
+#A <- mpitb.A(set1)
+```

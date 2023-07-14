@@ -13,12 +13,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-# mpitb
+# mpitb: a toolbox for estimating multidimensional poverty indices in R
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of mpitb is to ...
+The goal of this package is to ...
 
 ## Installation
 
@@ -33,18 +33,50 @@ devtools::install_github("girelaignacio/mpitb")
 
 This is a basic example which shows you how calculate the Multidimensional Poverty Index:
 
+#### Getting started
+
+Load the `"swz_mics14"` dataset from the package. See the structure of the variables. 
+
 ```{r example}
 #library(mpitb)
-## Use swz_mics2013 data
-#data <- swz_mics2013
+## Use swz_mics14 data
+#data <- swz_mics14
+```
+
+We are going to estimate poverty disaggregated by different population subgroups: Region and Area. Please note that if we see the structure of this data, `Region` and ``Area`` are `Factor`.
+
+```{r strdata}
+# str(swz_mics14)
+```
+
+#### The first step
+
+Specify the household survey design with `survey` R package and other arguments to be used in the settings of our estimation of the MPI. 
+
+```{r step1}
 ## Configurate the survey design 
-#data <- svydesign(id=~psu, weights = ~hhweight, strata = ~stratum, data = swz_mics213)
+# data <- survey::svydesign(id=~psu, weights = ~hhweight, strata = ~stratum, data = swz_mics14)
+# class(data)
+```
+
+#### The second step
+
+Set up the data and parameters for our estimation of the MPI with `mpitb.set` function.
+```{r step2}
+#set1 <- mpitb.set(data, indicators)
+#print(set1)
 ```
 
 What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
 
-```{r cars}
-summary(cars)
+```{r structure set1}
+#summary(set1)
 ```
 
+#### Estimate the Adjusted Headcount Ratio, Incidence and Intensity of Poverty
 
+```{r estimate-measures}
+#M0 <- mpitb.M0(set1)
+#H <- mpitb.H(set1)
+#A <- mpitb.A(set1)
+```
