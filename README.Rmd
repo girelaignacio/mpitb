@@ -100,13 +100,19 @@ The structure of this object is a list of lists. The list contains the measures 
 M0
 ```
 
-This is quite ugly but necessary for controlling objects. Since the package is thought for beginners/intermediate R users, extensions of R base generic functions are included in the package such as `as.data.frame` which permits the user to examine the results in a more convenient way. 
+This is quite ugly but necessary for controlling objects. Since the package is thought for beginners/intermediate R users, extensions of R base generic functions are included in the package such as `as.data.frame()` which permits the user to examine the results in a more convenient way. 
 
 This makes results easier to control by the user. Once converted the `mpitb_measure` class object to `data.frame`, the user can easily filter the results by group, level, cut-off using R functions like `subset` or funtions from `tidyr` package (depending on what is more confortable to the user). Here is an example:
 
 ```{r dataframe mpitbmeasure}
 M0.results <- as.data.frame(M0)
 head(M0.results)
+```
+
+Other typical R methods are included such as `coef()` and `confint()` to retrieve the estimated coefficients and confidence intervals of the poverty measures, respectively.
+```{r coefconfint mpitb_measure}
+coef(M0)
+confint(M0, parm = "coefficient", level = 0.95)
 ```
 
 In addition, if the user wants to estimate all the measures at once, she/he can use `mpitb.est` function

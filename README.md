@@ -173,6 +173,9 @@ M0
 #> attr(,"se")
 #>     Overall 
 #> 0.009810924 
+#> attr(,"df")
+#> Overall 
+#>     339 
 #> 
 #> [[1]]$Region
 #>     Hhohho    Manzini Shiselweni    Lubombo 
@@ -182,6 +185,9 @@ M0
 #> attr(,"se")
 #>     Hhohho    Manzini Shiselweni    Lubombo 
 #> 0.01705064 0.01742673 0.01567143 0.02303003 
+#> attr(,"df")
+#>     Hhohho    Manzini Shiselweni    Lubombo 
+#>         95         96         78         70 
 #> 
 #> [[1]]$Area
 #>     Urban     Rural 
@@ -191,6 +197,9 @@ M0
 #> attr(,"se")
 #>      Urban      Rural 
 #> 0.01334257 0.01072516 
+#> attr(,"df")
+#> Urban Rural 
+#>    86   253 
 #> 
 #> attr(,"k")
 #> [1] 0.25
@@ -202,8 +211,8 @@ M0
 This is quite ugly but necessary for controlling objects. Since the
 package is thought for beginners/intermediate R users, extensions of R
 base generic functions are included in the package such as
-`as.data.frame` which permits the user to examine the results in a more
-convenient way.
+`as.data.frame()` which permits the user to examine the results in a
+more convenient way.
 
 This makes results easier to control by the user. Once converted the
 `mpitb_measure` class object to `data.frame`, the user can easily filter
@@ -221,6 +230,31 @@ head(M0.results)
 #> 4  Region Shiselweni    0.25   0.3838337    0.015671434
 #> 5  Region    Lubombo    0.25   0.3393379    0.023030034
 #> 6    Area      Urban    0.25   0.1007249    0.013342569
+```
+
+Other typical R methods are included such as `coef()` and `confint()` to
+retrieve the estimated coefficients and confidence intervals of the
+poverty measures, respectively.
+
+``` r
+coef(M0)
+#>                   Cut-offs Coefficient
+#> Overall.Overall       0.25   0.2802228
+#> Region.Hhohho         0.25   0.2517617
+#> Region.Manzini        0.25   0.2160783
+#> Region.Shiselweni     0.25   0.3838337
+#> Region.Lubombo        0.25   0.3393379
+#> Area.Urban            0.25   0.1007249
+#> Area.Rural            0.25   0.3439050
+confint(M0, parm = "coefficient", level = 0.95)
+#>                   Cut-offs Lower Bound (95%) Upper Bound (95%)
+#> Overall.Overall       0.25        0.26092489         0.2995208
+#> Region.Hhohho         0.25        0.21791187         0.2856115
+#> Region.Manzini        0.25        0.18148649         0.2506700
+#> Region.Shiselweni     0.25        0.35263431         0.4150332
+#> Region.Lubombo        0.25        0.29340590         0.3852698
+#> Area.Urban            0.25        0.07420077         0.1272491
+#> Area.Rural            0.25        0.32278302         0.3650270
 ```
 
 In addition, if the user wants to estimate all the measures at once,
