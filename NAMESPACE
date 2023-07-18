@@ -2,6 +2,7 @@
 
 S3method(as.data.frame,mpitb_measure)
 S3method(coef,mpitb_measure)
+S3method(confint,mpitb_measure)
 S3method(mpitb.A,mpitb_set)
 S3method(mpitb.H,mpitb_set)
 S3method(mpitb.M0,mpitb_set)

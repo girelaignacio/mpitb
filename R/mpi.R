@@ -27,7 +27,8 @@ mpitb.M0.mpitb_set <- function(object, ...){
     data <- update.survey.design(data, c.k = censored.c.score)
     mylist <- svybys(survey::make.formula("c.k"), bys = survey::make.formula(over), data, survey::svymean)
 
-    M0 <- lapply(mylist, FUN = mpitb.measure)
+    M0 <- lapply(mylist, FUN = function(x) mpitb.measure(x, data))
+
     names(M0) <- over
     attr(M0, "k") <- k
     output[[i]] <- M0
@@ -65,7 +66,7 @@ mpitb.H.mpitb_set <- function(object, ...){
     data <- update.survey.design(data, mpi.k = poor.mpi)
     mylist <- svybys(survey::make.formula("mpi.k"), bys = survey::make.formula(over), data, survey::svymean)
 
-    H <- lapply(mylist, FUN = mpitb.measure)
+    H <- lapply(mylist, FUN = function(x) mpitb.measure(x, data))
 
     names(H) <- over
 
@@ -107,7 +108,7 @@ mpitb.A.mpitb_set <- function(object, ...){
     data <- update.survey.design(data, c.k = censored.c.score, mpi.k = poor.mpi)
     mylist <- svybys(survey::make.formula("c.k"), survey::make.formula(over), design = subset(data, data$variables[,'mpi.k']==1), survey::svymean)
 
-    A <- lapply(mylist, FUN = mpitb.measure)
+    A <- lapply(mylist, FUN = function(x) mpitb.measure(x, data))
 
     names(A) <- over
 

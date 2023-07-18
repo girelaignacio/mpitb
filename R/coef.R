@@ -1,7 +1,7 @@
-#' Extract the coefficients from the calculated measures by poverty cut-off
+#' Extract the coefficients from the calculated measures
 #'
 #' @param object an object of class `mpitb_measure`.
-#' @param cutoff numeric value vector of the poverty cut-offs (k) for which the coefficients are desired.
+#' @param k numeric value vector of the poverty cut-offs (k) for which the coefficients are desired.
 #' @param over character
 #' @param level character
 #' @param ... other arguments
@@ -10,9 +10,16 @@
 #' @export
 #'
 #' @examples
-coef.mpitb_measure <- function(object, cutoff = NULL, over = NULL, level = NULL, ...) {
-  # check if `cutoff`is numeric and unique
-  coeffs <- sapply(object, FUN = function(x) if(attr(x,"k") == cutoff) unlist(x))
+coef.mpitb_measure <- function(object, k = NULL, over = NULL, level = NULL, ...) {
+
+  cutoffs <- lapply(object, FUN = function(x) rep(attr(x,"k"), sum(sapply(x, FUN = function(y) length(y)))))
+  cutoffs <- do.call("c",cutoffs)
+
+  coeffs <- unlist(object)
+
+  output <- cbind(cutoffs,coeffs)
+  colnames(output) <- c("Cut-offs", "Coefficient")
+
 
   # check if `over`is character and unique
   if (!is.null(over)){
@@ -24,6 +31,5 @@ coef.mpitb_measure <- function(object, cutoff = NULL, over = NULL, level = NULL,
     coeffs <- subset(coeffs, grepl(level, rownames(coeffs)))
   }
 
-  colnames(coeffs) <- "coefficient"
-  coeffs
+  output
 }

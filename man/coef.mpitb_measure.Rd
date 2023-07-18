@@ -2,14 +2,14 @@
 % Please edit documentation in R/coef.R
 \name{coef.mpitb_measure}
 \alias{coef.mpitb_measure}
-\title{Extract the coefficients from the calculated measures by poverty cut-off}
+\title{Extract the coefficients from the calculated measures}
 \usage{
-\method{coef}{mpitb_measure}(object, cutoff = NULL, over = NULL, level = NULL, ...)
+\method{coef}{mpitb_measure}(object, k = NULL, over = NULL, level = NULL, ...)
 }
 \arguments{
 \item{object}{an object of class `mpitb_measure`.}
 
-\item{cutoff}{numeric value vector of the poverty cut-offs (k) for which the coefficients are desired.}
+\item{k}{numeric value vector of the poverty cut-offs (k) for which the coefficients are desired.}
 
 \item{over}{character}
 
@@ -18,5 +18,5 @@
 \item{...}{other arguments}
 }
 \description{
-Extract the coefficients from the calculated measures by poverty cut-off
+Extract the coefficients from the calculated measures
 }
