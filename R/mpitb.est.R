@@ -2,16 +2,16 @@
 #'
 #' @param object a `mpitb_set` class object
 #' @param measures Character vector with the desired AF measures. By default: c("M0", "A", "H", "Headcounts")
-#' @param ...
+#' @param ... other arguments
 #'
 #' @return
 #' @export
-#' @rdname mpitb.headcounts
+#' @rdname mpitb.est
 #'
 #' @examples
 mpitb.est <- function(object, measures, ...) {UseMethod("mpitb.est", object)}
 
-#' @rdname mpitb.headcounts
+#' @rdname mpitb.est
 #' @export
 mpitb.est.mpitb_set <- function(object, measures = c("M0","H","A","Headcounts"), ...){
   estimation <- vector("list", length = length(measures))
