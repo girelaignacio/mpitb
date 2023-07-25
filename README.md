@@ -261,5 +261,17 @@ In addition, if the user wants to estimate all the measures at once,
 she/he can use `mpitb.est` function
 
 ``` r
-#mpitb.est(set)
+estimation <- mpitb.est(set)
+# All measures are save in a list. We can make use of other functions by accessing to names of the list
+names(estimation)
+#> [1] "M0"         "H"          "A"          "Headcounts"
+as.data.frame(estimation$M0)
+#>      Over      Level Cut-off Coefficient Standard Error
+#> 1 Overall    Overall    0.25   0.2802228    0.009810924
+#> 2  Region     Hhohho    0.25   0.2517617    0.017050642
+#> 3  Region    Manzini    0.25   0.2160783    0.017426726
+#> 4  Region Shiselweni    0.25   0.3838337    0.015671434
+#> 5  Region    Lubombo    0.25   0.3393379    0.023030034
+#> 6    Area      Urban    0.25   0.1007249    0.013342569
+#> 7    Area      Rural    0.25   0.3439050    0.010725163
 ```
