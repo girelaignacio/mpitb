@@ -6,19 +6,37 @@
 #' @param level character
 #' @param ... other arguments
 #'
-#' @return
 #' @export
 #'
 #' @examples
+#'
+#' library(mpitb)
+#' data <- survey::svydesign(id=~PSU, weights = ~Weight, strata = ~Strata,
+#'         data = swz_mics14)
+#' indicators <- c("Water","Assets","School","Nutrition")
+#' weights <- c(1/6,1/6,1/3,1/3)
+#' cutoff <- c(25,50)
+#' over <- c("Region","Area")
+#'
+#' set <- mpitb.set(data, indicators, cutoff, weights, over,
+#'       name = "Example", desc = "SWZ MICS survey 2014")
+#'
+#' M0 <- mpitb.M0(set)
+#' as.data.frame(M0)
+#' coef(M0)
+#'
+
 coef.mpitb_measure <- function(object, k = NULL, over = NULL, level = NULL, ...) {
 
-  cutoffs <- lapply(object, FUN = function(x) rep(attr(x,"k"), sum(sapply(x, FUN = function(y) length(y)))))
-  cutoffs <- do.call("c",cutoffs)
+  #cutoffs <- lapply(object, FUN = function(x) rep(attr(x,"k"), sum(sapply(x, FUN = function(y) length(y)))))
+  #cutoffs <- do.call("c",cutoffs)
+  cutoffs <- retrieve.cutoffs(object)
 
-  coeffs <- unlist(object)
+  #coeffs <- unlist(object)
+  coeffs <- retrieve.coefficients(object)
 
-  output <- cbind(cutoffs,coeffs)
-  colnames(output) <- c("Cut-offs", "Coefficient")
+  out <- cbind(cutoffs,coeffs)
+  colnames(out) <- c("Cut-offs", "Coefficient")
 
 
   # check if `over`is character and unique
@@ -31,5 +49,5 @@ coef.mpitb_measure <- function(object, k = NULL, over = NULL, level = NULL, ...)
     coeffs <- subset(coeffs, grepl(level, rownames(coeffs)))
   }
 
-  output
+  return(out)
 }

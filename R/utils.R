@@ -1,16 +1,9 @@
-#' eSwatini MICS 2014 merged
-#'
-#' @name swz_mics14
-#' @docType data
-#' @author OPHI Summer School 2022
-#' @references \url{https://mics.unicef.org/surveys}
-"swz_mics14"
-
 mpitb.measure <- function(X, data){
   b <- stats::coef(X)
   se <- suppressWarnings(sqrt(diag(stats::vcov(X))))
   over <- names(X)[1]
   dfs <- sapply(rownames(X), FUN=function(x) survey::degf(subset(data,data$variables[, over] == x)))
+  #dfs <- sapply(rownames(X), FUN=function(x) dim(subset(data,data$variables[, over] == x))[1])
   #fac <- qt(level + (1 - level)/2, df=dfs) #¿qt(0.975,df=n-1)*se/sqrt(n)?
   #lb <- b - fac * se
   #ub <- b + fac * se
@@ -22,6 +15,7 @@ mpitb.measure <- function(X, data){
 
   return(b)
 }
+
 as.data.frame.mpitb_est <- function(x, row.names = NULL, optional = FALSE, ...) {
   list.measures <- lapply(x, FUN = as.data.frame)
   # add column with names of the measure

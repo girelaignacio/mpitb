@@ -1,7 +1,7 @@
 Package: mpitb
 Type: Package
 Title: A toolbox for calculating multidimensional poverty indices (MPI)
-Version: 0.1.0
+Version: 0.2.0
 Author: person("Ignacio", "Girela", 
           email = "ignacio.girela@unc.edu.ar", role = c("aut", "cre"),
           comment = c(ORCID = "0000-0003-3297-3854"))

@@ -5,6 +5,7 @@
 #' @param K Numerical. Vector of poverty cut-offs. Can be values between 1 and 100.
 #' @param weights Weights of each indicator.
 #' @param over Character.
+#' @param year Character.
 #' @param name Character.
 #' @param desc Character.
 #' @param ... other arguments
@@ -13,7 +14,19 @@
 #' @export
 #'
 #' @examples
-mpitb.set <- function(data, indicators, K, weights, over = NULL,
+#'
+#' library(mpitb)
+#' data <- survey::svydesign(id=~PSU, weights = ~Weight, strata = ~Strata,
+#'         data = swz_mics14)
+#' indicators <- c("Water","Assets","School","Nutrition")
+#' weights <- c(1/6,1/6,1/3,1/3)
+#' cutoff <- c(25,50)
+#' over <- c("Region","Area")
+#'
+#' set <- mpitb.set(data, indicators, cutoff, weights, over,
+#'       name = "Example", desc = "SWZ MICS survey 2014")
+
+mpitb.set <- function(data, indicators, K, weights, over = NULL, year = NULL,
                       name = NULL, desc = NULL, ...) {
 
   #### check.arguments ####
@@ -52,8 +65,14 @@ mpitb.set <- function(data, indicators, K, weights, over = NULL,
     stop("Poverty cut-offs (K) are out of range. \n K must be between 1 and 100")
   }
 
-  #.transformation of arguments and variables ####
+    #.transformation of arguments and variables ####
   K <- change.K.scale(K)
+
+  # check if year is in data columns
+  if (!is.null(year)){
+    if (!(year %in% colnames(data))){stop("Error: year column not found in data")}
+  }
+
 
   data[,"Overall"] <- "Overall"
 
@@ -94,6 +113,7 @@ mpitb.set <- function(data, indicators, K, weights, over = NULL,
     attr(set, "desc") <- desc
   }
 
+  if (!is.null(year)){set$year <- year}
 
   set$indicators <- indicators
   set$K <- K

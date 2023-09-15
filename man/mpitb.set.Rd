@@ -10,6 +10,7 @@ mpitb.set(
   K,
   weights,
   over = NULL,
+  year = NULL,
   name = NULL,
   desc = NULL,
   ...
@@ -26,6 +27,8 @@ mpitb.set(
 
 \item{over}{Character.}
 
+\item{year}{Character.}
+
 \item{name}{Character.}
 
 \item{desc}{Character.}
@@ -37,4 +40,17 @@ mpitb.set(
 }
 \description{
 Set the specification of the project
+}
+\examples{
+
+library(mpitb)
+data <- survey::svydesign(id=~PSU, weights = ~Weight, strata = ~Strata,
+        data = swz_mics14)
+indicators <- c("Water","Assets","School","Nutrition")
+weights <- c(1/6,1/6,1/3,1/3)
+cutoff <- c(25,50)
+over <- c("Region","Area")
+
+set <- mpitb.set(data, indicators, cutoff, weights, over,
+      name = "Example", desc = "SWZ MICS survey 2014")
 }

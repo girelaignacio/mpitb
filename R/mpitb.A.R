@@ -10,6 +10,21 @@
 #' @rdname mpitb.A
 #'
 #' @examples
+#' #' library(mpitb)
+#' data <- survey::svydesign(id=~PSU, weights = ~Weight, strata = ~Strata,
+#'         data = swz_mics14)
+#' indicators <- c("Water","Assets","School","Nutrition")
+#' weights <- c(1/6,1/6,1/3,1/3)
+#' cutoff <- c(25,50)
+#' over <- c("Region","Area")
+#'
+#' set <- mpitb.set(data, indicators, cutoff, weights, over,
+#'       name = "Example", desc = "SWZ MICS survey 2014")
+#'
+#' A <- mpitb.A(set)
+#' as.data.frame(A)
+#'
+
 mpitb.A <- function(object, ...) UseMethod("mpitb.A", object)
 
 #' @rdname mpitb.A

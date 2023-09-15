@@ -18,3 +18,21 @@
 \description{
 Extract the confident intervals from the calculated measures
 }
+\examples{
+
+library(mpitb)
+data <- survey::svydesign(id=~PSU, weights = ~Weight, strata = ~Strata,
+        data = swz_mics14)
+indicators <- c("Water","Assets","School","Nutrition")
+weights <- c(1/6,1/6,1/3,1/3)
+cutoff <- c(25,50)
+over <- c("Region","Area")
+
+set <- mpitb.set(data, indicators, cutoff, weights, over,
+      name = "Example", desc = "SWZ MICS survey 2014")
+
+M0 <- mpitb.M0(set)
+as.data.frame(M0)
+
+confint(M0, parm = "coefficient", level = 0.95)
+}
