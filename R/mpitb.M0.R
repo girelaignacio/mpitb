@@ -43,96 +43,14 @@ mpitb.M0.mpitb_set <- function(object, ...){
     M0 <- lapply(mylist, FUN = function(x) mpitb.measure(x, data))
 
     names(M0) <- over
-    attr(M0, "k") <- k
+    attr(M0, "k") <- k*100
     output[[i]] <- M0
   }
+  attr(output, "year") <- object$year
   class(output) <- c("mpitb_M0", "mpitb_measure")
   output
 }
 
-#' Incidence (H)
-#'
-#' Calculate the Incidence of poverty or the proportion of multidimensionally poor people.
-#'
-#' @param object `mpitb_set` object
-#' @param ... other arguments
-#'
-#' @return `mpitb_H` and `mpitb_measure` class
-#'
-#' @export
-#' @rdname mpitb.H
-#'
-#' @examples
-mpitb.H <- function(object, ...) UseMethod("mpitb.H", object)
-
-#' @rdname mpitb.H
-#' @export
-mpitb.H.mpitb_set <- function(object, ...){
-  data <- object$data
-  over <- object$over
-  c.score <- data$variables$c.score
-  K <- object$K
-  output <- vector("list", length = length(K))
-  for (i in 1:length(K)){
-    k <- K[i]
-    poor.mpi <- ifelse(c.score >= k,1,0)
-    data <- update.survey.design(data, mpi.k = poor.mpi)
-    mylist <- svybys(survey::make.formula("mpi.k"), bys = survey::make.formula(over), data, survey::svymean)
-
-    H <- lapply(mylist, FUN = function(x) mpitb.measure(x, data))
-
-    names(H) <- over
-
-    H <- lapply(H, "*",100)
-
-    attr(H, "k") <- k
-    output[[i]] <- H
-  }
-  class(output) <- c("mpitb_H", "mpitb_measure")
-  output
-}
-
-#' Intensity (A)
-#'
-#' Calculates the Intensity of poverty or the average deprivation score of the multidimensionally poor people
-#'
-#' @param object `mpitb_set` object
-#' @param ... other arguments
-#'
-#' @return `mpitb_A` and `mpitb_measure` class
-#' @export
-#' @rdname mpitb.A
-#'
-#' @examples
-mpitb.A <- function(object, ...) UseMethod("mpitb.A", object)
-
-#' @rdname mpitb.A
-#' @export
-mpitb.A.mpitb_set <- function(object, ...){
-  data <- object$data
-  over <- object$over
-  c.score <- data$variables$c.score
-  K <- object$K
-  output <- vector("list", length = length(K))
-  for (i in 1:length(K)){
-    k <- K[i]
-    poor.mpi <- as.factor(ifelse(c.score >= k,1,0))
-    censored.c.score <- censored.deprivations.score(c.score, k)
-    data <- update.survey.design(data, c.k = censored.c.score, mpi.k = poor.mpi)
-    mylist <- svybys(survey::make.formula("c.k"), survey::make.formula(over), design = subset(data, data$variables[,'mpi.k']==1), survey::svymean)
-
-    A <- lapply(mylist, FUN = function(x) mpitb.measure(x, data))
-
-    names(A) <- over
-
-    A <- lapply(A, "*",100)
-
-    attr(A, "k") <- k
-    output[[i]] <- A
-  }
-  class(output) <- c("mpitb_A", "mpitb_measure")
-  output
-}
 
 #' Censored Headcount Ratios
 #'

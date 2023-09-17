@@ -10,7 +10,7 @@ mpitb.set(
   K,
   weights,
   over = NULL,
-  year = NULL,
+  year,
   name = NULL,
   desc = NULL,
   ...

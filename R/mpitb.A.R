@@ -48,9 +48,10 @@ mpitb.A.mpitb_set <- function(object, ...){
 
     A <- lapply(A, "*",100)
 
-    attr(A, "k") <- k
+    attr(A, "k") <- k*100
     output[[i]] <- A
   }
+  attr(output, "Year") <- object$year
   class(output) <- c("mpitb_A", "mpitb_measure")
   output
 }

@@ -49,6 +49,7 @@ mpitb.H.mpitb_set <- function(object, ...){
     attr(H, "k") <- k
     output[[i]] <- H
   }
+  attr(output, "Year") <- object$year
   class(output) <- c("mpitb_H", "mpitb_measure")
   output
 }

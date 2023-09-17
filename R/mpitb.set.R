@@ -26,7 +26,7 @@
 #' set <- mpitb.set(data, indicators, cutoff, weights, over,
 #'       name = "Example", desc = "SWZ MICS survey 2014")
 
-mpitb.set <- function(data, indicators, K, weights, over = NULL, year = NULL,
+mpitb.set <- function(data, indicators, K, weights, over = NULL, year,
                       name = NULL, desc = NULL, ...) {
 
   #### check.arguments ####
@@ -69,8 +69,12 @@ mpitb.set <- function(data, indicators, K, weights, over = NULL, year = NULL,
   K <- change.K.scale(K)
 
   # check if year is in data columns
-  if (!is.null(year)){
-    if (!(year %in% colnames(data))){stop("Error: year column not found in data")}
+  if (!missing(year)){
+    # if character <- check if column
+    if (!(year %in% colnames(data)))
+    {stop("Error: year column not found in data")}else{
+        year <- unique(data$variables[,year])
+      }
   }
 
 
@@ -113,7 +117,7 @@ mpitb.set <- function(data, indicators, K, weights, over = NULL, year = NULL,
     attr(set, "desc") <- desc
   }
 
-  if (!is.null(year)){set$year <- year}
+  if (!missing(year)){set$year <- unique(year)}
 
   set$indicators <- indicators
   set$K <- K
