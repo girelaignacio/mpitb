@@ -6,7 +6,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of this package is to …
+The goal of this package is to introduce …
 
 ## Installation
 
@@ -34,20 +34,20 @@ the variables.
 library(mpitb)
 ## Use swz_mics14 data
 head(swz_mics14)
-#>   Household ID Household ID 2   Weight PSU Strata Water Assets School Nutrition
-#> 1            1              1 1.137301   1      5     0      1      0         0
-#> 2            1              1 1.137301   1      5     0      1      0         0
-#> 3            1              1 1.137301   1      5     0      1      0         0
-#> 4            1              1 1.137301   1      5     0      1      0         0
-#> 5            1              2 1.137301   1      5     0      0      0         0
-#> 6            1              2 1.137301   1      5     0      0      0         0
-#>   Region  Area
-#> 1 Hhohho Rural
-#> 2 Hhohho Rural
-#> 3 Hhohho Rural
-#> 4 Hhohho Rural
-#> 5 Hhohho Rural
-#> 6 Hhohho Rural
+#>   Household ID Household ID 2 PSU Strata   Weight Nutrition School Water Assets
+#> 1          101         100101   1      5 1.137301         0      0     0      1
+#> 2          101         100102   1      5 1.137301         0      0     0      1
+#> 3          101         100103   1      5 1.137301         0      0     0      1
+#> 4          101         100104   1      5 1.137301         0      0     0      1
+#> 5          102         100201   1      5 1.137301         0      0     0      0
+#> 6          102         100202   1      5 1.137301         0      0     0      0
+#>    Area Region
+#> 1 Rural Hhohho
+#> 2 Rural Hhohho
+#> 3 Rural Hhohho
+#> 4 Rural Hhohho
+#> 5 Rural Hhohho
+#> 6 Rural Hhohho
 ```
 
 We are going to estimate poverty disaggregated by different population
@@ -57,17 +57,17 @@ this data, `Region` and `Area` are `Factor`.
 ``` r
 str(swz_mics14)
 #> 'data.frame':    20739 obs. of  11 variables:
-#>  $ Household ID  : num  1 1 1 1 1 1 1 1 1 1 ...
-#>  $ Household ID 2: num  1 1 1 1 2 2 2 2 2 3 ...
-#>  $ Weight        : num  1.14 1.14 1.14 1.14 1.14 ...
+#>  $ Household ID  : num  101 101 101 101 102 102 102 102 102 103 ...
+#>  $ Household ID 2: num  1e+05 1e+05 1e+05 1e+05 1e+05 ...
 #>  $ PSU           : num  1 1 1 1 1 1 1 1 1 1 ...
 #>  $ Strata        : num  5 5 5 5 5 5 5 5 5 5 ...
+#>  $ Weight        : num  1.14 1.14 1.14 1.14 1.14 ...
+#>  $ Nutrition     : num  0 0 0 0 0 0 0 0 0 0 ...
+#>  $ School        : num  0 0 0 0 0 0 0 0 0 0 ...
 #>  $ Water         : num  0 0 0 0 0 0 0 0 0 1 ...
 #>  $ Assets        : num  1 1 1 1 0 0 0 0 0 0 ...
-#>  $ School        : num  0 0 0 0 0 0 0 0 0 0 ...
-#>  $ Nutrition     : num  0 0 0 0 0 0 0 0 0 0 ...
-#>  $ Region        : Factor w/ 4 levels "Hhohho","Manzini",..: 1 1 1 1 1 1 1 1 1 1 ...
 #>  $ Area          : Factor w/ 2 levels "Urban","Rural": 2 2 2 2 2 2 2 2 2 2 ...
+#>  $ Region        : Factor w/ 4 levels "Hhohho","Manzini",..: 1 1 1 1 1 1 1 1 1 1 ...
 ```
 
 #### The first step
@@ -166,37 +166,37 @@ standard errors as an `atribute` of that element.
 M0
 #> [[1]]
 #> [[1]]$Overall
-#>   Overall 
-#> 0.2470048 
+#>    Overall 
+#> 0.09782088 
 #> attr(,"over")
 #> [1] "Overall"
 #> attr(,"se")
 #>     Overall 
-#> 0.008094095 
+#> 0.005230329 
 #> attr(,"df")
 #> Overall 
 #>     339 
 #> 
 #> [[1]]$Region
 #>     Hhohho    Manzini Shiselweni    Lubombo 
-#>  0.2216897  0.1954898  0.3156730  0.3106835 
+#> 0.08441687 0.07104974 0.13478863 0.13006382 
 #> attr(,"over")
 #> [1] "Region"
 #> attr(,"se")
-#>     Hhohho    Manzini Shiselweni    Lubombo 
-#> 0.01395912 0.01414651 0.01153642 0.02059724 
+#>      Hhohho     Manzini  Shiselweni     Lubombo 
+#> 0.008838600 0.007811974 0.008313157 0.015928619 
 #> attr(,"df")
 #>     Hhohho    Manzini Shiselweni    Lubombo 
 #>         95         96         78         70 
 #> 
 #> [[1]]$Area
 #>      Urban      Rural 
-#> 0.08961249 0.30284434 
+#> 0.03109217 0.12149484 
 #> attr(,"over")
 #> [1] "Area"
 #> attr(,"se")
-#>      Urban      Rural 
-#> 0.01227201 0.00874578 
+#>       Urban       Rural 
+#> 0.006592045 0.006279293 
 #> attr(,"df")
 #> Urban Rural 
 #>    86   253 
@@ -224,12 +224,12 @@ the user). Here is an example:
 M0.results <- as.data.frame(M0)
 head(M0.results)
 #>      Over      Level Cut-off Coefficient Standard Error
-#> 1 Overall    Overall      25  0.24700481    0.008094095
-#> 2  Region     Hhohho      25  0.22168971    0.013959125
-#> 3  Region    Manzini      25  0.19548977    0.014146506
-#> 4  Region Shiselweni      25  0.31567295    0.011536425
-#> 5  Region    Lubombo      25  0.31068348    0.020597244
-#> 6    Area      Urban      25  0.08961249    0.012272011
+#> 1 Overall    Overall      25  0.09782088    0.005230329
+#> 2  Region     Hhohho      25  0.08441687    0.008838600
+#> 3  Region    Manzini      25  0.07104974    0.007811974
+#> 4  Region Shiselweni      25  0.13478863    0.008313157
+#> 5  Region    Lubombo      25  0.13006382    0.015928619
+#> 6    Area      Urban      25  0.03109217    0.006592045
 ```
 
 Other typical R methods are included such as `coef()` and `confint()` to
@@ -239,22 +239,22 @@ poverty measures, respectively.
 ``` r
 coef(M0)
 #>                   Cut-offs Coefficient
-#> Overall.Overall         25  0.24700481
-#> Region.Hhohho           25  0.22168971
-#> Region.Manzini          25  0.19548977
-#> Region.Shiselweni       25  0.31567295
-#> Region.Lubombo          25  0.31068348
-#> Area.Urban              25  0.08961249
-#> Area.Rural              25  0.30284434
+#> Overall.Overall         25  0.09782088
+#> Region.Hhohho           25  0.08441687
+#> Region.Manzini          25  0.07104974
+#> Region.Shiselweni       25  0.13478863
+#> Region.Lubombo          25  0.13006382
+#> Area.Urban              25  0.03109217
+#> Area.Rural              25  0.12149484
 confint(M0, parm = "coefficient", level = 0.95)
 #>                   Cut-offs Lower Bound (95%) Upper Bound (95%)
-#> Overall.Overall         25        0.24614009        0.24786952
-#> Region.Hhohho           25        0.21884609        0.22453333
-#> Region.Manzini          25        0.19262342        0.19835612
-#> Region.Shiselweni       25        0.31307189        0.31827402
-#> Region.Lubombo          25        0.30577224        0.31559472
-#> Area.Urban              25        0.08698137        0.09224362
-#> Area.Rural              25        0.30176147        0.30392722
+#> Overall.Overall         25        0.09726211        0.09837965
+#> Region.Hhohho           25        0.08261636        0.08621738
+#> Region.Manzini          25        0.06946688        0.07263259
+#> Region.Shiselweni       25        0.13291431        0.13666296
+#> Region.Lubombo          25        0.12626577        0.13386186
+#> Area.Urban              25        0.02967884        0.03250551
+#> Area.Rural              25        0.12071736        0.12227232
 ```
 
 In addition, if the user wants to estimate all the measures at once,
@@ -267,11 +267,11 @@ names(estimation)
 #> [1] "M0"         "H"          "A"          "Headcounts"
 as.data.frame(estimation$M0)
 #>      Over      Level Cut-off Coefficient Standard Error
-#> 1 Overall    Overall      25  0.24700481    0.008094095
-#> 2  Region     Hhohho      25  0.22168971    0.013959125
-#> 3  Region    Manzini      25  0.19548977    0.014146506
-#> 4  Region Shiselweni      25  0.31567295    0.011536425
-#> 5  Region    Lubombo      25  0.31068348    0.020597244
-#> 6    Area      Urban      25  0.08961249    0.012272011
-#> 7    Area      Rural      25  0.30284434    0.008745780
+#> 1 Overall    Overall      25  0.09782088    0.005230329
+#> 2  Region     Hhohho      25  0.08441687    0.008838600
+#> 3  Region    Manzini      25  0.07104974    0.007811974
+#> 4  Region Shiselweni      25  0.13478863    0.008313157
+#> 5  Region    Lubombo      25  0.13006382    0.015928619
+#> 6    Area      Urban      25  0.03109217    0.006592045
+#> 7    Area      Rural      25  0.12149484    0.006279293
 ```
