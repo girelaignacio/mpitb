@@ -95,7 +95,7 @@ is the vector of the groups, `name` and `desc` are for specifying a
 personal name and description of your setting.
 
 ``` r
-indicators <- c("Water","Assets","School","Nutrition")
+indicators <- c("Nutrition","School","Water","Assets")
 weights <- c(1/3,1/3,1/6,1/6)
 cutoff <- c(25)
 over <- c("Region","Area")
@@ -167,42 +167,42 @@ M0
 #> [[1]]
 #> [[1]]$Overall
 #>   Overall 
-#> 0.2802228 
+#> 0.2470048 
 #> attr(,"over")
 #> [1] "Overall"
 #> attr(,"se")
 #>     Overall 
-#> 0.009810924 
+#> 0.008094095 
 #> attr(,"df")
 #> Overall 
 #>     339 
 #> 
 #> [[1]]$Region
 #>     Hhohho    Manzini Shiselweni    Lubombo 
-#>  0.2517617  0.2160783  0.3838337  0.3393379 
+#>  0.2216897  0.1954898  0.3156730  0.3106835 
 #> attr(,"over")
 #> [1] "Region"
 #> attr(,"se")
 #>     Hhohho    Manzini Shiselweni    Lubombo 
-#> 0.01705064 0.01742673 0.01567143 0.02303003 
+#> 0.01395912 0.01414651 0.01153642 0.02059724 
 #> attr(,"df")
 #>     Hhohho    Manzini Shiselweni    Lubombo 
 #>         95         96         78         70 
 #> 
 #> [[1]]$Area
-#>     Urban     Rural 
-#> 0.1007249 0.3439050 
+#>      Urban      Rural 
+#> 0.08961249 0.30284434 
 #> attr(,"over")
 #> [1] "Area"
 #> attr(,"se")
 #>      Urban      Rural 
-#> 0.01334257 0.01072516 
+#> 0.01227201 0.00874578 
 #> attr(,"df")
 #> Urban Rural 
 #>    86   253 
 #> 
 #> attr(,"k")
-#> [1] 0.25
+#> [1] 25
 #> 
 #> attr(,"class")
 #> [1] "mpitb_M0"      "mpitb_measure"
@@ -224,12 +224,12 @@ the user). Here is an example:
 M0.results <- as.data.frame(M0)
 head(M0.results)
 #>      Over      Level Cut-off Coefficient Standard Error
-#> 1 Overall    Overall    0.25   0.2802228    0.009810924
-#> 2  Region     Hhohho    0.25   0.2517617    0.017050642
-#> 3  Region    Manzini    0.25   0.2160783    0.017426726
-#> 4  Region Shiselweni    0.25   0.3838337    0.015671434
-#> 5  Region    Lubombo    0.25   0.3393379    0.023030034
-#> 6    Area      Urban    0.25   0.1007249    0.013342569
+#> 1 Overall    Overall      25  0.24700481    0.008094095
+#> 2  Region     Hhohho      25  0.22168971    0.013959125
+#> 3  Region    Manzini      25  0.19548977    0.014146506
+#> 4  Region Shiselweni      25  0.31567295    0.011536425
+#> 5  Region    Lubombo      25  0.31068348    0.020597244
+#> 6    Area      Urban      25  0.08961249    0.012272011
 ```
 
 Other typical R methods are included such as `coef()` and `confint()` to
@@ -239,22 +239,22 @@ poverty measures, respectively.
 ``` r
 coef(M0)
 #>                   Cut-offs Coefficient
-#> Overall.Overall       0.25   0.2802228
-#> Region.Hhohho         0.25   0.2517617
-#> Region.Manzini        0.25   0.2160783
-#> Region.Shiselweni     0.25   0.3838337
-#> Region.Lubombo        0.25   0.3393379
-#> Area.Urban            0.25   0.1007249
-#> Area.Rural            0.25   0.3439050
+#> Overall.Overall         25  0.24700481
+#> Region.Hhohho           25  0.22168971
+#> Region.Manzini          25  0.19548977
+#> Region.Shiselweni       25  0.31567295
+#> Region.Lubombo          25  0.31068348
+#> Area.Urban              25  0.08961249
+#> Area.Rural              25  0.30284434
 confint(M0, parm = "coefficient", level = 0.95)
 #>                   Cut-offs Lower Bound (95%) Upper Bound (95%)
-#> Overall.Overall       0.25        0.26092489         0.2995208
-#> Region.Hhohho         0.25        0.21791187         0.2856115
-#> Region.Manzini        0.25        0.18148649         0.2506700
-#> Region.Shiselweni     0.25        0.35263431         0.4150332
-#> Region.Lubombo        0.25        0.29340590         0.3852698
-#> Area.Urban            0.25        0.07420077         0.1272491
-#> Area.Rural            0.25        0.32278302         0.3650270
+#> Overall.Overall         25        0.24614009        0.24786952
+#> Region.Hhohho           25        0.21884609        0.22453333
+#> Region.Manzini          25        0.19262342        0.19835612
+#> Region.Shiselweni       25        0.31307189        0.31827402
+#> Region.Lubombo          25        0.30577224        0.31559472
+#> Area.Urban              25        0.08698137        0.09224362
+#> Area.Rural              25        0.30176147        0.30392722
 ```
 
 In addition, if the user wants to estimate all the measures at once,
@@ -267,11 +267,11 @@ names(estimation)
 #> [1] "M0"         "H"          "A"          "Headcounts"
 as.data.frame(estimation$M0)
 #>      Over      Level Cut-off Coefficient Standard Error
-#> 1 Overall    Overall    0.25   0.2802228    0.009810924
-#> 2  Region     Hhohho    0.25   0.2517617    0.017050642
-#> 3  Region    Manzini    0.25   0.2160783    0.017426726
-#> 4  Region Shiselweni    0.25   0.3838337    0.015671434
-#> 5  Region    Lubombo    0.25   0.3393379    0.023030034
-#> 6    Area      Urban    0.25   0.1007249    0.013342569
-#> 7    Area      Rural    0.25   0.3439050    0.010725163
+#> 1 Overall    Overall      25  0.24700481    0.008094095
+#> 2  Region     Hhohho      25  0.22168971    0.013959125
+#> 3  Region    Manzini      25  0.19548977    0.014146506
+#> 4  Region Shiselweni      25  0.31567295    0.011536425
+#> 5  Region    Lubombo      25  0.31068348    0.020597244
+#> 6    Area      Urban      25  0.08961249    0.012272011
+#> 7    Area      Rural      25  0.30284434    0.008745780
 ```

@@ -67,7 +67,7 @@ Specify the set of parameters for our estimation of the MPI with `mpitb.set` fun
 Apart from our `data` object, parameters of `mpitb.set` function include `indicators`, `cutoffs`, `weights` and other optional arguments: `over` is the vector of the groups, `name` and `desc` are for specifying a personal name and description of your setting. 
 
 ```{r step2}
-indicators <- c("Water","Assets","School","Nutrition")
+indicators <- c("Nutrition","School","Water","Assets")
 weights <- c(1/3,1/3,1/6,1/6)
 cutoff <- c(25)
 over <- c("Region","Area")

@@ -1,4 +1,4 @@
-.swap <- function(x,y) {
+swap <- function(x,y) {
   eval( parse( text = paste(
     "swap_unique_var_a<-", substitute(x), ";",
     substitute(x), "<-", substitute(y), ";",
