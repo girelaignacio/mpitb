@@ -42,15 +42,12 @@ confint.mpitb_measure <- function(object, parm, level, ...){
 
   #degfs <- unlist(lapply(object, FUN = function(X) unlist(sapply(X, FUN = function(x) attr(x,"df")), use.names = F)))
   degfs <- retrieve.df(object)
-  #fac <- stats::qt(level + (1 - level)/2, df=degfs)
-  #qt(p=alpha/2, df=degfs-1,lower.tail=F)
   alpha <- 1-level
-  sample.se <- se/sqrt(degfs)
-  #degfs <- degfs - 1
   t.score <- stats::qt(p=alpha/2, df=degfs-1,lower.tail=FALSE)
-  fac <- stats::qt(alpha/2,df=degfs, lower.tail = FALSE)/sqrt(degfs)
-  lb <- b - t.score * sample.se
-  ub <- b + t.score * sample.se
+  lb <- b - t.score * se
+  ub <- b + t.score * se
+
+  # p-value <- pt(b[1]/se[1], degfs[1]-1, lower.tail = FALSE)*2
 
   out <- cbind(cutoffs,lb,ub)
   colnames(out) <- c("Cut-offs",paste("Lower Bound (",level*100,"%)", sep = ""), paste("Upper Bound (",level*100,"%)", sep = ""))
