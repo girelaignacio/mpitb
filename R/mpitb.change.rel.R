@@ -1,4 +1,4 @@
-mpitb.abs.change <- function(mpitb_measure_t1, mpitb_measure_t2){
+mpitb.change.rel <- function(mpitb_measure_t1, mpitb_measure_t2){
 
   # .check if they are from the same mpitb_measure
   if(all(class(mpitb_measure_t1) != class(mpitb_measure_t2))){
@@ -15,12 +15,12 @@ mpitb.abs.change <- function(mpitb_measure_t1, mpitb_measure_t2){
     stop("Error: mpitb_mesures do not have the same cut-offs. These measures are not comparable")
   }
 
-  absolute.change <- function(t1,t2) {
-    return(t2 - t1)
+  relative.change <- function(t1,t2) {
+    return((t2 - t1)/t1 * 100)
   }
-  mapply.abs.change <- function(t1,t2) mapply(absolute.change, t1,t2)
+  mapply.rel.change <- function(t1,t2) mapply(relative.change, t1,t2)
 
-  absolute.change <- mapply(mapply.abs.change, mpitb_measure_t1, mpitb_measure_t2, SIMPLIFY=FALSE)
+  relative.change <- mapply(mapply.rel.change, mpitb_measure_t1, mpitb_measure_t2, SIMPLIFY=FALSE)
 
-  absolute.change
+  relative.change
 }
