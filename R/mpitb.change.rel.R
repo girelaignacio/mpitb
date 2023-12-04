@@ -16,7 +16,11 @@ mpitb.change.rel <- function(mpitb_measure_t1, mpitb_measure_t2){
   }
 
   relative.change <- function(t1,t2) {
-    return((t2 - t1)/t1 * 100)
+    # (y/x - 1)*100 standard error
+    # 100 * sqrt((se.y^2/x^2)+((se.x^2*y^2)/(x^4)))
+    change <- (t2 - t1)/t1 * 100
+    attr(change,"se") <- 100 * sqrt((attr(t2,"se")^2/t1^2)+((attr(t1,"se")^2*t2^2)/(t1^4)))
+    return(change)
   }
   mapply.rel.change <- function(t1,t2) mapply(relative.change, t1,t2)
 
