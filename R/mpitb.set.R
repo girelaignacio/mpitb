@@ -84,7 +84,7 @@ mpitb.set <- function(data, indicators, K, weights, over = NULL, year,
   # G0 <- matrix: Deprivation Matrix
   G0 <- G0.matrix(data, indicators)
   # G0_w <- matrix: Weighted Deprivation Matrix
-  G0_w <- G0_w.matrix(G0, weights)
+  G0_w <- weighted.G0.matrix(G0, weights)
 
   # Calculate the deprivations score ####
   # cens.score <- numeric: Deprivations score
