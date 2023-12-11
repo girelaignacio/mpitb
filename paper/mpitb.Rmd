@@ -40,10 +40,20 @@ library(palmerpenguins)
 
 # Introduction
 
-Over the last two decades, there has been a substantial increase in the use of multidimensional poverty measures both in academic literature and policy practice.
+Although poverty is widely conceived as the deprivation of attain basic living standards, its measures are conventionally based on monetary shortfalls. Nevertheless, over the last two decades, there has been a substantial increase in the use of multidimensional methodologies for measuring poverty with the aim of capture different aspects of such phenomenon. In particular, the framework proposed by \cite{af11} has gained prominent popularity due to its flexibility and [...]. For example, the global Multidimensional Poverty Index (MPI), an yearly published measure by the UNDP, is based on the Alkire and Foster method (AF method, hereafter). Furthermore, numerous countries 
+
+In spite of its [increasing popularity], calculating AF measures in practice is still challenging with regard to the lack of a unified and integrated framework on how to produce, analyse and present different estimates. 
+
+%%As examples, it is possible to mention the well-known Human Development Index and Wealth Index. Both aim to capture different dimensions of poverty. The former groups three different education, health and wealth indices whereas the latter is an asset-based composite index.%%
 
 
-However, calculating AF measures in practice is still challenging with regard to the lack of a unified and integrated framework on how to produce, analyse and present different estimates. 
+
+%both in academic literature and policy practice.
+
+%The measurement framework proposed by \citet{af11} has gained 
+
+
+
 
 Therefore, this package seeks to provide a 
 

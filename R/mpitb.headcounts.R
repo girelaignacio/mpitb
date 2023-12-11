@@ -20,38 +20,42 @@ mpitb.headcounts.mpitb_set <- function(object, censored = FALSE, ...) {
   indicators <- object$indicators
 
   if (censored == FALSE) {
-  ### Calculate uncensored indicators headcount ratio
-  output <- vector("list", length = 1)
-  mylist <- survey::svybys(survey::make.formula(indicators), bys = survey::make.formula(over),data,survey::svymean)
+    #### Calculate uncensored indicators headcount ratio
+    output <- vector("list", length = 1)
+    mylist <- survey::svybys(survey::make.formula(indicators), bys = survey::make.formula(over),data,survey::svymean)
 
-  Hj <- lapply(mylist, FUN = function(x) mpitb.measure(x, data))
-  names(Hj) <- over
-  attr(Hj, "k") <- NA
-  output[[1]] <- Hj
-  } else {
-  ### Calculate censored indicators headcount ratio
-  K <- object$K
-  output <- vector("list", length = length(K))
-  for (i in 1:length(K)){
-    k <- K[i]
-      # Censored deprivation matrix
-    c.data <- object$data
-    c.score <- object$data$variables$c.score
-    #  G0.k<-data$variables[,indicators]
-      for (l in 1:length(c.score)){
-        if(c.score[l] <= k){
-          c.data$variables[l,indicators] <- rep(0, length(indicators))
+    Hj <- lapply(mylist, FUN = function(x) mpitb.measure(x, data))
+    names(Hj) <- over
+    attr(Hj, "k") <- NA
+    output[[1]] <- Hj
+    ####
+    } else {
+    #### Calculate censored indicators headcount ratio
+      K <- object$K
+      output <- vector("list", length = length(K))
+      for (i in 1:length(K)){
+        k <- K[i]
+          #### Censored deprivation matrix
+        cens.data <- object$data
+        mpi.poor <- cens.data$variables$c.score >= k
+        G0 <- G0.matrix(object$data,indicators)
+        cens.G0 <- matrix(NA, nrow = nrow(G0), ncol = ncol(G0))
+        colnames(cens.G0) <- indicators
+        for (col in 1:length(indicators)){
+          cens.G0[, col] <- ifelse(mpi.poor, G0[, col], 0)
         }
+        cens.data[, indicators] <- cens.G0
+          ####
+
+        mylist <- survey::svybys(survey::make.formula(indicators), bys = survey::make.formula(over), cens.data, survey::svymean)
+
+        Hj <- lapply(mylist, FUN = function(x) mpitb.measure(x, c.data))
+        names(Hj) <- over
+        attr(Hj, "k") <- k
+        output[[i]] <- Hj
+     ####
       }
-
-      mylist <- survey::svybys(survey::make.formula(indicators), bys = survey::make.formula(over),c.data,survey::svymean)
-
-      Hj <- lapply(mylist, FUN = function(x) mpitb.measure(x, c.data))
-      names(Hj) <- over
-      attr(Hj, "k") <- k
-      output[[i]] <- Hj
     }
-  }
   class(output) <- c("mpitb_headcounts", "mpitb_measure")
   output
 }
