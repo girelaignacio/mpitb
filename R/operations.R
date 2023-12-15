@@ -42,16 +42,7 @@ censored.deprivations.score <- function(cvector, cutoff){
 }
 
 # Censored deprivations matrix ####
-censored.G0.matrix <- function(){
-  data <- object$data
-  c.score <- data$variables$c.score
-  G0.k<-data$variables[,indicators]
-  for (row in 1:length(c.score)){
-    if(c.score[row] <= k){
-      data$variables[row,indicators] <- rep(0, length(indicators))
-    }
-  }
-}
+censored.G0.matrix <- function(object, ...){}
 
 
 

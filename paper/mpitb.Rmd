@@ -1,8 +1,8 @@
 ---
-title: "mpitb: A toolbox for calculating multidimensional poverty measures in R"
-date: "2023-08-05"
+title: "mpitb: A toolbox for calculating multidimensional poverty indices in R"
+date: "2023-12-31"
 abstract: >
-  An abstract of less than 150 words.
+  (An abstract of less than 150 words.) This article presents mpitb, an integrated framework for calculating multidimensional poverty indices (MPIs). This package supports the popular Alkire-Foster framework for measuring multidimensional poverty.
 draft: true
 author:  
   # see ?rjournal_article for more information
@@ -11,20 +11,12 @@ author:
     address:
     - Facultad de Ciencias Económicas
     - Córdoba, Argentina
-#    url: https://www.britannica.com/animal/quokka
+    url: https://www.eco.unc.edu.ar/
     orcid: 0000-0003-3297-3854
     email:  ignacio.girela@unc.edu.ar
-#  - name: Bounciest Bilby
-#    url: https://www.britannica.com/animal/bilby
-#    email: bbil@ulm.edu
-#    orcid: 0000-0002-0912-0225
-#    affiliation: University of Little Mates
-#    address:
-#    - Department of Letter B
-#    - Somewhere, Australia
 type: package
 output: 
-  rjtools::rjournal_web_article:
+  rjtools::rjournal_pdf_article:
     self_contained: yes
     toc: no
 bibliography: RJreferences.bib
@@ -40,35 +32,16 @@ library(palmerpenguins)
 
 # Introduction
 
-Although poverty is widely conceived as the deprivation of attain basic living standards, its measures are conventionally based on monetary shortfalls. Nevertheless, over the last two decades, there has been a substantial increase in the use of multidimensional methodologies for measuring poverty with the aim of capture different aspects of such phenomenon. In particular, the framework proposed by \cite{af11} has gained prominent popularity due to its flexibility and [...]. For example, the global Multidimensional Poverty Index (MPI), an yearly published measure by the UNDP, is based on the Alkire and Foster method (AF method, hereafter). Furthermore, numerous countries 
+Although poverty is widely understood as the inability to achieve basic standards of living, the measurement of poverty has traditionally been based on monetary deficits. However, over the past two decades, there has been a significant increase in the use of multidimensional approaches to measuring poverty in an attempt to capture different aspects of this phenomenon. In this context, the measurement method proposed by @af11 (AF, hereafter) has become notably popular due to its flexibility and ability to inform policy. For instance, the well-known global Multidimensional Poverty Index (MPI), yearly published by the OPHI and the UNDP, is based on the AF method. Furthermore, many countries are developing their own MPIs to track poverty reduction progress using the AF method. 
 
-In spite of its [increasing popularity], calculating AF measures in practice is still challenging with regard to the lack of a unified and integrated framework on how to produce, analyse and present different estimates. 
+Although this method is increasingly popular, calculating AF measures in practice is still a challenging task due to the lack of a unified and integrated framework on how to produce, analyse and present different estimates. Motivated by this issue, OPHI has recently launched a Stata package [@mpitb_Stata] to provide [...]. This package seeks to adapt this framework to R users.
 
-%%As examples, it is possible to mention the well-known Human Development Index and Wealth Index. Both aim to capture different dimensions of poverty. The former groups three different education, health and wealth indices whereas the latter is an asset-based composite index.%%
-
-
-
-%both in academic literature and policy practice.
-
-%The measurement framework proposed by \citet{af11} has gained 
-
-
-
-
-Therefore, this package seeks to provide a 
-
-
-
+Some R packages that computes AF measures include \CRANpkg{MPI} [@MPIpkg] [...]. Notwithstanding, these packages do not consider the survey structure from which household surveys affecting the estimation of standard errors and, consequently, affecting subsequent statistical inference.
 
 This paper will first review some R packages on interactive graphics and their tooltip implementations. A new package \CRANpkg{ToOoOlTiPs} that provides customized tooltips for plot, is introduced. Some example plots will then be given to showcase how these tooltips help users to better read the graphics. 
 
 # Measuring multidimensional poverty: the Alkire-Foster Method
 
-
-
-# Background
-
-Some packages on interactive graphics include \CRANpkg{plotly} [@plotly] that interfaces with Javascript for web-based interactive graphics, \CRANpkg{crosstalk} [@crosstalk] that specializes cross-linking elements across individual graphics.  The recent R Journal paper \CRANpkg{tsibbletalk} [@RJ-2021-050] provides a good example of including interactive graphics into an article for the journal. It has both a set of linked plots, and also an animated gif example, illustrating linking between time series plots and feature summaries.
 
 # Customizing tooltip design with \pkg{ToOoOlTiPs}
 

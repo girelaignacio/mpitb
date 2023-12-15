@@ -3,6 +3,7 @@
 #' Calculate the censored headcount ratios for each indicator or the proportion of people who are multidimensionally poor and deprived in each indicator
 #'
 #' @param object `mpitb_set` object
+#' @param censored logical. If TRUE, it calculates the censored headcounts ratios. It is set FALSE by default.
 #' @param ... other arguments
 #'
 #' @return `mpitb_headcounts` and `mpitb_measure` class
@@ -10,6 +11,19 @@
 #' @rdname mpitb.headcounts
 #'
 #' @examples
+#' library(mpitb)
+#' data <- survey::svydesign(id=~PSU, weights = ~Weight, strata = ~Strata,
+#'         data = swz_mics14)
+#' indicators <- c("Water","Assets","School","Nutrition")
+#' weights <- c(1/6,1/6,1/3,1/3)
+#' cutoff <- c(25,50)
+#' over <- c("Region","Area")
+#'
+#' set <- mpitb.set(data, indicators, cutoff, weights, over,
+#'       name = "Example", desc = "SWZ MICS survey 2014")
+#'
+#' h_j <- mpitb.headcounts(set)
+#' as.data.frame(h_j)
 mpitb.headcounts <- function(object, ...) UseMethod("mpitb.headcounts", object)
 
 #' @rdname mpitb.headcounts
@@ -49,7 +63,7 @@ mpitb.headcounts.mpitb_set <- function(object, censored = FALSE, ...) {
 
         mylist <- survey::svybys(survey::make.formula(indicators), bys = survey::make.formula(over), cens.data, survey::svymean)
 
-        Hj <- lapply(mylist, FUN = function(x) mpitb.measure(x, c.data))
+        Hj <- lapply(mylist, FUN = function(x) mpitb.measure(x, cens.data))
         names(Hj) <- over
         attr(Hj, "k") <- k
         output[[i]] <- Hj

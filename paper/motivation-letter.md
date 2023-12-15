@@ -27,11 +27,11 @@ Regards,
     
     
     
-Quietest Quokka  
-Department of Letter Q  
-University of Little Mates  
-Somewhere, Australia  
-qquo@ulm.edu
+Ignacio Girela  
+CONICET - Facultad de Ciencias Económicas  
+Universidad Nacional de Córdoba  
+Córdoba, Argentina  
+ignacio.girela@unc.edu.ar  
 
 \bigskip
 

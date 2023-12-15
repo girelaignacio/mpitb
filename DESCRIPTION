@@ -6,7 +6,7 @@ Author: person("Ignacio", "Girela",
           email = "ignacio.girela@unc.edu.ar", role = c("aut", "cre"),
           comment = c(ORCID = "0000-0003-3297-3854"))
 Maintainer: The package maintainer <ignacio.girela@unc.edu.ar>
-Description: This package contains a group of commands for calculating MPI based on the Alkire-Foster framework. Users can obtain MPI partial indices such as incidence (H) and intensity (A) of poverty as well as decomposed measures by groups or indicators. The standard errors and confidence intervals are calculated considering the household survey design. 
+Description: This package represents a framework for calculating Multidimensional Poverty Indices based on the Alkire-Foster method. Users can obtain MPI partial indices such as incidence (H) and intensity (A) of poverty as well as decomposed measures by groups or indicators. The standard errors and confidence intervals are calculated considering the household survey design. 
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
@@ -16,3 +16,6 @@ Imports:
     survey (>= 4.1.1)
 Depends: 
     R (>= 2.10)
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

@@ -1,31 +1,28 @@
 % !TeX root = RJwrapper.tex
-\title{mpitb: A toolbox for calculating multidimensional poverty measures in R}
+\title{mpitb: A toolbox for calculating multidimensional poverty indices in R}
+
+
 \author{by Ignacio Girela}
 
 \maketitle
 
 \abstract{%
-An abstract of less than 150 words.
+(An abstract of less than 150 words.) This article presents mpitb, an integrated framework for calculating multidimensional poverty indices (MPIs). This package supports the popular Alkire-Foster framework for measuring multidimensional poverty.
 }
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-Over the last two decades, there has been a substantial increase in the use of multidimensional poverty measures both in academic literature and policy practice.
+Although poverty is widely understood as the inability to achieve basic standards of living, the measurement of poverty has traditionally been based on monetary deficits. However, over the past two decades, there has been a significant increase in the use of multidimensional approaches to measuring poverty in an attempt to capture different aspects of this phenomenon. In this context, the measurement method proposed by Alkire and Foster (2011) (AF, hereafter) has become notably popular due to its flexibility and ability to inform policy. For instance, the well-known global Multidimensional Poverty Index (MPI), yearly published by the OPHI and the UNDP, is based on the AF method. Furthermore, many countries are developing their own MPIs to track poverty reduction progress using the AF method.
 
-However, calculating AF measures in practice is still challenging with regard to the lack of a unified and integrated framework on how to produce, analyse and present different estimates.
+Although this method is increasingly popular, calculating AF measures in practice is still a challenging task due to the lack of a unified and integrated framework on how to produce, analyse and present different estimates. Motivated by this issue, OPHI has recently launched a Stata package (Suppa 2023) to provide {[}\ldots{]}. This package seeks to adapt this framework to R users.
 
-Therefore, this package seeks to provide a
+Some R packages that computes AF measures include \CRANpkg{MPI} (Kukiattikun and Chainarong 2022) {[}\ldots{]}. Notwithstanding, these packages do not consider the survey structure from which household surveys affecting the estimation of standard errors and, consequently, affecting subsequent statistical inference.
 
 This paper will first review some R packages on interactive graphics and their tooltip implementations. A new package \CRANpkg{ToOoOlTiPs} that provides customized tooltips for plot, is introduced. Some example plots will then be given to showcase how these tooltips help users to better read the graphics.
 
 \hypertarget{measuring-multidimensional-poverty-the-alkire-foster-method}{%
 \section{Measuring multidimensional poverty: the Alkire-Foster Method}\label{measuring-multidimensional-poverty-the-alkire-foster-method}}
-
-\hypertarget{background}{%
-\section{Background}\label{background}}
-
-Some packages on interactive graphics include \CRANpkg{plotly} (Sievert 2020) that interfaces with Javascript for web-based interactive graphics, \CRANpkg{crosstalk} (Cheng and Sievert 2021) that specializes cross-linking elements across individual graphics. The recent R Journal paper \CRANpkg{tsibbletalk} (Wang and Cook 2021) provides a good example of including interactive graphics into an article for the journal. It has both a set of linked plots, and also an animated gif example, illustrating linking between time series plots and feature summaries.
 
 \hypertarget{customizing-tooltip-design-with}{%
 \section{\texorpdfstring{Customizing tooltip design with \pkg{ToOoOlTiPs}}{Customizing tooltip design with }}\label{customizing-tooltip-design-with}}
@@ -70,9 +67,9 @@ Adelie & Torgersen & 39.3 & 20.6 & 190 & 3650 & male & 2007\\
 Figure \ref{fig:penguins-ggplot} shows an plot of the penguins data, made using the \CRANpkg{ggplot2} package.
 
 \begin{verbatim}
-penguins %>%
-  ggplot(aes(x = bill_depth_mm, y = bill_length_mm,
-             color = species)) +
+penguins %>% 
+  ggplot(aes(x = bill_depth_mm, y = bill_length_mm, 
+             color = species)) + 
   geom_point()
 \end{verbatim}
 
@@ -93,17 +90,17 @@ We have displayed various tooltips that are available in the package \pkg{ToOoOl
 
 \hypertarget{refs}{}
 \begin{CSLReferences}{1}{0}
-\leavevmode\vadjust pre{\hypertarget{ref-crosstalk}{}}%
-Cheng, Joe, and Carson Sievert. 2021. \emph{{crosstalk}: Inter-Widget Interactivity for HTML Widgets}. \url{https://CRAN.R-project.org/package=crosstalk}.
+\leavevmode\vadjust pre{\hypertarget{ref-af11}{}}%
+Alkire, Sabina, and J. E. Foster. 2011. {``Counting and Multidimensional Poverty Measurement.''} \emph{Journal of Public Economics} 95 (7): 476--87.
 
 \leavevmode\vadjust pre{\hypertarget{ref-palmerpenguins}{}}%
 Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. \emph{{palmerpenguins}: Palmer Archipelago (Antarctica) Penguin Data}. \url{https://allisonhorst.github.io/palmerpenguins/}.
 
-\leavevmode\vadjust pre{\hypertarget{ref-plotly}{}}%
-Sievert, Carson. 2020. \emph{{Interactive Web-Based Data Visualizatio}n with r, Plotly, and Shiny}. Chapman; Hall/CRC. \url{https://plotly-r.com}.
+\leavevmode\vadjust pre{\hypertarget{ref-MPIpkg}{}}%
+Kukiattikun, Kittiya, and Chainarong Chainarong. 2022. \emph{MPI: Computation of Multidimensional Poverty Index (MPI)}. \url{https://CRAN.R-project.org/package=MPI}.
 
-\leavevmode\vadjust pre{\hypertarget{ref-RJ-2021-050}{}}%
-Wang, Earo, and Dianne Cook. 2021. {``Conversations in Time: Interactive Visualisation to Explore Structured Temporal Data.''} \emph{The R Journal}. \url{https://doi.org/10.32614/RJ-2021-050}.
+\leavevmode\vadjust pre{\hypertarget{ref-mpitb_Stata}{}}%
+Suppa, Nicolai. 2023. {``{m}pitb: A Toolbox for Multidimensional Poverty Indices.''} \emph{The Stata Journal} 23 (3): 625--57. \url{https://doi.org/10.1177/1536867X231195286}.
 
 \end{CSLReferences}
 
@@ -114,7 +111,7 @@ Ignacio Girela\\
 CONICET - Universidad Nacional de Córdoba\\%
 Facultad de Ciencias Económicas\\ Córdoba, Argentina\\
 %
-\url{https://www.britannica.com/animal/quokka}\\%
+\url{https://www.eco.unc.edu.ar/}\\%
 \textit{ORCiD: \href{https://orcid.org/0000-0003-3297-3854}{0000-0003-3297-3854}}\\%
 \href{mailto:ignacio.girela@unc.edu.ar}{\nolinkurl{ignacio.girela@unc.edu.ar}}%
 }

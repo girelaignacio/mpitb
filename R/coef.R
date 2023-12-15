@@ -28,11 +28,8 @@
 
 coef.mpitb_measure <- function(object, k = NULL, over = NULL, level = NULL, ...) {
 
-  #cutoffs <- lapply(object, FUN = function(x) rep(attr(x,"k"), sum(sapply(x, FUN = function(y) length(y)))))
-  #cutoffs <- do.call("c",cutoffs)
   cutoffs <- retrieve.cutoffs(object)
 
-  #coeffs <- unlist(object)
   coeffs <- retrieve.coefficients(object)
 
   out <- cbind(cutoffs,coeffs)
