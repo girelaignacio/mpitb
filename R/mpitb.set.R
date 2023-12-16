@@ -2,12 +2,12 @@
 #'
 #' @param data `survey.design` object
 #' @param indicators Vector or a List.
-#' @param K Numerical. Vector of poverty cut-offs. Can be values between 1 and 100.
 #' @param weights Weights of each indicator.
-#' @param over Character.
+#' @param K Numerical. Vector of poverty cut-offs. Can be values between 1 and 100.
+#' @param subgroup Character.
 #' @param year Character.
 #' @param name Character.
-#' @param desc Character.
+#' @param description Character.
 #' @param ... other arguments
 #'
 #' @return `mpitb_set` object
@@ -21,64 +21,93 @@
 #' indicators <- c("Water","Assets","School","Nutrition")
 #' weights <- c(1/6,1/6,1/3,1/3)
 #' cutoff <- c(25,50)
-#' over <- c("Region","Area")
+#' subgroup <- c("Region","Area")
 #'
-#' set <- mpitb.set(data, indicators, cutoff, weights, over,
-#'       name = "Example", desc = "SWZ MICS survey 2014")
+#' set <- mpitb.set(data, indicators, weights, cutoff, subgroup,
+#'       name = "Example", description = "SWZ MICS survey 2014")
 
-mpitb.set <- function(data, indicators, K, weights, over = NULL, year,
-                      name = NULL, desc = NULL, ...) {
+mpitb.set <- function(data, indicators, weights, K = 1, subgroup = NULL, year = NULL,
+                      name = "Unnamed project", description = "No description", ...) {
+  this.call <- match.call()
+  # Print this call so that the user can check if arguments are correctly assigned
+  print(this.call)
 
-  #### check.arguments ####
-  if (missing(data)) {
-    stop("Error: data not found")
-  }
-  if (missing(indicators)) {
-    stop("Error: set of dimensions and indicators not found")
-  }
-  # set can be a list (when dimensions and indicators are under studies or vector when only indicators are under study)
-  if (missing(K)) {
-    stop("Error: Poverty cut-off value (K) not found")
-  }
+  #### Check arguments ####
 
-  if (!is.null(over)) {
-    if (!all(over %in% colnames(data))){
-      stop("Error: groups not found in data")
-    }
-    over <- c("Overall", over)
-  } else { over <- c("Overall") }
-
-  # check if data is a survey.design object
+    ### `data` argument
+      ## check if `data` missing argument
+  if (missing(data)) {stop("Error: `data` not found")}
+      ## check if `data` has non-NULL dim()
+  nd <- dim(data)
+  if (is.null(nd)) {stop("`data` should have non-NULL dimension")}
+      ## check if `data` is a `survey.design` class object. If not, it is coerced to a `survey.design` class assuming simple random sampling
   if (!inherits(data, "survey.design")) {
-    cat("object `data` is not survey.design class. Coerced to survey.design class.")
-    # if not a survey.design -> coerced to survey.design assuming equal probability
+    warning("`data` is not `survey.design` class. Coerced to survey.design class.")
     data <- as.data.frame(data)
     data <- survey::svydesign(id=~rownames(data), data = data)
-  }
-  # check if poverty cut-offs is a numeric vector
-  if (!inherits(K,"numeric")){
-    stop("Poverty cut-offs (K) are not numeric values")
+    }
+
+    ### `indicators` argument
+      ## check if `indicators` missing argument
+  if (missing(indicators)) {stop("Error: `indicators` not found")}
+      ## check if `indicators` are `character` class
+  stopifnot("`indicators` should be a `character`" = is.character(indicators))
+      ## check if `indicators` are in `data` colnames()
+  stopifnot("At least one indicator is not found in `data`" = indicators %in% colnames(data))
+
+    ### `weights` argument
+      ## check if `weights` missing argument
+  if (missing(weights)) {
+    warning("`weights` not found. An equal weighting scheme is assumed between all indicators.")
+    weights <- rep(1/length(indicators), length(indicators))
+    }
+      ## check if `weights` is numeric
+  stopifnot("`weights` should be a `numeric`" = is.numeric(weights))
+      ## check if `weights` sum up to 1
+  stopifnot("`weights` must sum up to 1" = sum(weights) == 1)
+      ## check if `weights` has the same length as `indicators`
+  stopifnot("`weights` and `indicators` do not have the same length" = length(weights) == length(indicators))
+
+    ### `K` argument (poverty cut-offs)
+      ## check if `K` is numeric
+  stopifnot("`K` should be a `numeric`" = is.numeric(K))
+      ## check if `K` is between 1 and 100
+  stopifnot("`K` out of range. Values greater than 100 found" = K <= 100)
+  stopifnot("`K` out of range. Values lower than 1 found" = K >= 1)
+
+    ### `subgroup` argument
+  if (!is.null(subgroup)) {
+      ## check if `subgroup` is `character`
+    stopifnot("`subgroup` should be a `character`" = is.character(subgroup))
+      ## check if `indicators` are in `data` colnames()
+    stopifnot("At least one subgroup not found in `data`" = subgroup %in% colnames(data))
+    subgroup <- c("Total", subgroup)
+    # The total observations in the data are interpreted as a subgroup
+    } else {subgroup <- c("Total")}
+
+    ### `year` argument
+  if (!is.null(year)) {
+    ## check if `year` is `character`
+    stopifnot("`year` should be a `character`" = is.character(year))
+    ## check if `year` is of length 1
+    stopifnot("`year` should be one element (the column of out data that contains information about the year)" = length(year) == 1)
+    ## check if `year` is in `data` colnames()
+    stopifnot("At least one subgroup not found in `data`" = year %in% colnames(data))
   }
 
-  # check if poverty cut-offs are between 1 and 100
-  if (any(K < 1) | any(K > 100)) {
-    stop("Poverty cut-offs (K) are out of range. \n K must be between 1 and 100")
-  }
+    ### `name` argument
+      ## check if `year` is `character`
+  stopifnot("`name` should be a `character`" = is.character(name))
+
+    ### `description` argument
+      ## check if `description` is `character`
+  stopifnot("`description` should be a `character`" = is.character(description))
+
 
     #.transformation of arguments and variables ####
   K <- change.K.scale(K)
 
-  # check if year is in data columns
-  if (!missing(year)){
-    # if character <- check if column
-    if (!(year %in% colnames(data)))
-    {stop("Error: year column not found in data")}else{
-        year <- unique(data$variables[,year])
-      }
-  }
-
-
-  data[,"Overall"] <- "Overall"
+  data[,"Total"] <- "Total"
 
   # Create the deprivations and weighted deprivations matrix ####
   # G0 <- matrix: Deprivation Matrix
@@ -96,28 +125,12 @@ mpitb.set <- function(data, indicators, K, weights, over = NULL, year,
   set <- list()
   set$data <- data
   # check if name is character
-  if (!is.null(name)){
-    if(!is.character(name)){
-      name <- "Unnnamed project"
-      attr(set, "name") <- name
-    } else {attr(set, "name") <- name}
-  } else {
-    name <- "Unnamed project"
-    attr(set, "name") <- name
-  }
+  attr(set, "name") <- name
 
   # check if description is a character
-  if (!is.null(desc)){
-    if(!is.character(desc)){
-      desc <- "Preferred specification"
-      attr(set, "desc") <- desc
-    } else {attr(set, "desc") <- desc}
-  } else {
-    desc <- "Preferred specification"
-    attr(set, "desc") <- desc
-  }
+  attr(set, "description") <- description
 
-  if (!missing(year)){set$year <- unique(year)}
+  set$year <- unique(year)
 
   set$indicators <- indicators
   set$K <- K
@@ -125,7 +138,7 @@ mpitb.set <- function(data, indicators, K, weights, over = NULL, year,
   set$weights <- weights
   attr(set$weights, "scheme") <- "equal"
 
-  set$over <- over
+  set$subgroup <- subgroup
 
   class(set) <- "mpitb_set"
 
@@ -142,7 +155,7 @@ print.mpitb_set <- function(x, ...) {
   cat("--- Specification --- \n",
       "Name: ", attr(x,"name"),"\n",
       "Weighting scheme: ", attr(x$weights,"scheme"),"\n",
-      "Description: ", attr(x,"desc"),"\n\n"
+      "Description: ", attr(x,"description"),"\n\n"
   )
 
   cat("--- Survey design --- \n")
@@ -154,7 +167,7 @@ print.mpitb_set <- function(x, ...) {
       "Indicators: ",length(x$indicators),"\n")
 
   cat("\n--- Number of subgroups ---\n")
-  for (i in x$over[-1]){
+  for (i in x$subgroup[-1]){
     cat(i,":", length(levels(x$data$variables[,i])), "levels\n\n\n")
   }
 
