@@ -74,6 +74,7 @@ mpitb.set <- function(data, indicators, weights, K = 1, subgroup = NULL, year = 
       ## check if `K` is between 1 and 100
   stopifnot("`K` out of range. Values greater than 100 found" = K <= 100)
   stopifnot("`K` out of range. Values lower than 1 found" = K >= 1)
+  if (length(K) > 3) {warning("There are more than 3 poverty cut-off. This can slow down further calculations.")}
 
     ### `subgroup` argument
   if (!is.null(subgroup)) {
