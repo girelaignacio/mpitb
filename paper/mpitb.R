@@ -12,6 +12,12 @@ library(palmerpenguins)
 knitr::include_graphics("penguins.png")
 
 
+## ----library, echo = TRUE-----------------------------------------------------
+library(mpitb)
+
+data <- swz_mics14
+
+
 ## ----penguins-tab-interactive, eval = knitr::is_html_output(), layout = "l-body-outset"----
 #> knitr::kable(head(penguins), format = "html", caption = "A basic table")
 

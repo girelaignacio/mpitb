@@ -2,7 +2,7 @@
 title: "mpitb: A toolbox for calculating multidimensional poverty indices in R"
 date: "2023-12-31"
 abstract: >
-  (An abstract of less than 150 words.) This article presents mpitb, an integrated framework for calculating multidimensional poverty indices (MPIs). This package supports the popular Alkire-Foster framework for measuring multidimensional poverty.
+  This article presents \pkg{mpitb}, an R package for calculating multidimensional poverty indices (MPIs) based on the popular Alkire-Foster measurement approach. \pkg{mpitb} package provides a tractable and extensive framework for researchers, analysts, and practitioners working on mutltidimensional poverty measurement projects in the same vein of the well-known global MPI workflow.
 draft: true
 author:  
   # see ?rjournal_article for more information
@@ -20,7 +20,8 @@ output:
     self_contained: yes
     toc: no
 bibliography: RJreferences.bib
-
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -32,28 +33,41 @@ library(palmerpenguins)
 
 # Introduction
 
-Although poverty is widely understood as the inability to achieve basic standards of living, the measurement of poverty has traditionally been based on monetary deficits. However, over the past two decades, there has been a significant increase in the use of multidimensional approaches to measuring poverty in an attempt to capture different aspects of this phenomenon. In this context, the measurement method proposed by @af11 (AF, hereafter) has become notably popular due to its flexibility and ability to inform policy. For instance, the well-known global Multidimensional Poverty Index (MPI), yearly published by the OPHI and the UNDP, is based on the AF method. Furthermore, many countries are developing their own MPIs to track poverty reduction progress using the AF method. 
+Although poverty is widely understood as the inability to achieve basic standards of living, the measurement of poverty has traditionally been based on monetary deficits. However, over the past two decades, there has been a significant increase in the use of multidimensional approaches to measuring poverty in an attempt to capture different dimensions of this phenomenon. In this context, the dual-cut-off-counting measurement approach proposed by @af11 (AF, hereafter) has become particularly popular due to its flexibility and ability to inform policy. For example, the AF method is the basis of the global Multidimensional Poverty Index (MPI) which is yearly published by the United Nations Development Programme and the Oxford Poverty and Human Development Initiative [@UNDP-OPHI_2021]. In addition, many countries are developing their own official MPIs to track poverty reduction progress using the AF method. 
 
-Although this method is increasingly popular, calculating AF measures in practice is still a challenging task due to the lack of a unified and integrated framework on how to produce, analyse and present different estimates. Motivated by this issue, OPHI has recently launched a Stata package [@mpitb_Stata] to provide [...]. This package seeks to adapt this framework to R users.
+This measurement approach stands out both for providing an extensive policy information platform and remaining relatively understandable by the general public. 
 
-Some R packages that computes AF measures include \CRANpkg{MPI} [@MPIpkg] [...]. Notwithstanding, these packages do not consider the survey structure from which household surveys affecting the estimation of standard errors and, consequently, affecting subsequent statistical inference.
 
-This paper will first review some R packages on interactive graphics and their tooltip implementations. A new package \CRANpkg{ToOoOlTiPs} that provides customized tooltips for plot, is introduced. Some example plots will then be given to showcase how these tooltips help users to better read the graphics. 
+Despite the increasing popularity of this approach, calculating AF measures in practice is still a challenging task due to the lack of an integrated framework on how to generate, analyse and present various poverty estimates together.  Motivated by this problem, OPHI launched a Stata package [@mpitb_Stata] with the aim of facilitating the production process of the global MPI to researchers, analysts and practitioners. To do so, @mpitb_Stata (continue...).
+This package adapts this framework for R users.
+
+The AF method stands out both for providing an extensive policy information platform and remaining relatively understandable by the general public. Hence, calculating the point estimates underlies simple linear algebra operations. Some very recent R packages that computes AF measures include \CRANpkg{MPI} [@MPIpkg] and \CRANpkg{mpindex} [@mpindexpkg]. Notwithstanding, these packages do not account for the complex survey designs from where data are drawn. This issue affects the estimation of the standard errors and, consequently, impacts further statistical inference exercises of interest. Namely, is multidimensional poverty in one subgroup of the population greater than another? Has poverty been reduced over time?
 
 # Measuring multidimensional poverty: the Alkire-Foster Method
 
 
-# Customizing tooltip design with \pkg{ToOoOlTiPs}
+# Overview of \pkg{mpitb}
 
-\pkg{ToOoOlTiPs} is a packages for customizing tooltips in interactive graphics, it features these possibilities.
+\pkg{mpitb} is a packages for ...
 
-# A gallery of tooltips examples
+# Applications
 
-The \CRANpkg{palmerpenguins} data [@palmerpenguins]  features three penguin species which has a lovely illustration by Alison Horst in Figure \@ref(fig:penguins-alison). 
+@mpitb_Stata provide a set of examples .... With the view of consistency, we apply ... on the same data...
+
+
+The \CRANpkg{palmerpenguins} data features three penguin species which has a lovely illustration by Alison Horst in Figure \@ref(fig:penguins-alison). 
 
 ```{r penguins-alison, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "}
 knitr::include_graphics("penguins.png")
 ```
+
+```{r library, echo = TRUE}
+library(mpitb)
+
+data <- swz_mics14
+```
+
+
 
 Table `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(tab:penguins-tab-interactive)', '\\@ref(tab:penguins-tab-static)'))` prints at the first few rows of the `penguins` data:
 
@@ -85,4 +99,8 @@ penguins %>%
 
 # Summary
 
-We have displayed various tooltips that are available in the package \pkg{ToOoOlTiPs}. 
+In this paper, we introduced a package for calculating multidimensional poverty indices based on the Alkire-Foster method
+
+# Acknowledgements
+
+I want to thank 
