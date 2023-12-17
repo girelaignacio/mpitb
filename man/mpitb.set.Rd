@@ -7,31 +7,31 @@
 mpitb.set(
   data,
   indicators,
-  K,
   weights,
-  over = NULL,
-  year,
-  name = NULL,
-  desc = NULL,
+  K = 1,
+  subgroup = NULL,
+  year = NULL,
+  name = "Unnamed project",
+  description = "No description",
   ...
 )
 }
 \arguments{
-\item{data}{`survey.design` object}
+\item{data}{Input data, a `survey.design` class object where a complex survey design was previously specified. Can be a matrix but it is coerced to a `survey.design` class assuming equal probabilities.}
 
-\item{indicators}{Vector or a List.}
+\item{indicators}{A character vector containing the names of the indicators. This character vector should belong to columns names of `data`.}
 
-\item{K}{Numerical. Vector of poverty cut-offs. Can be values between 1 and 100.}
+\item{weights}{A numerical vector representing the weights of each indicator. Should have the same length as `indicators` vector. Should sum up to 1. Default sets the same weight to each indicator}
 
-\item{weights}{Weights of each indicator.}
+\item{K}{A numerical vector representing the poverty cut-offs. Should be values between 1 and 100. Default is 1, i.e., deprivations are not censored.}
 
-\item{over}{Character.}
+\item{subgroup}{A character vector containing the names of the populations subgroup of interest. This character vector should belong to columns names of `data`.}
 
-\item{year}{Character.}
+\item{year}{A character object with the name of the column in `data` containing information about temporal information for analysis of changes over time.}
 
-\item{name}{Character.}
+\item{name}{A character object in which it can be specified a name for the project.}
 
-\item{desc}{Character.}
+\item{description}{A character object in which it can be specified a brief description for the project.}
 
 \item{...}{other arguments}
 }
@@ -49,8 +49,8 @@ data <- survey::svydesign(id=~PSU, weights = ~Weight, strata = ~Strata,
 indicators <- c("Water","Assets","School","Nutrition")
 weights <- c(1/6,1/6,1/3,1/3)
 cutoff <- c(25,50)
-over <- c("Region","Area")
+subgroup <- c("Region","Area")
 
-set <- mpitb.set(data, indicators, cutoff, weights, over,
-      name = "Example", desc = "SWZ MICS survey 2014")
+set <- mpitb.set(data, indicators, weights, cutoff, subgroup,
+      name = "Example", description = "SWZ MICS survey 2014")
 }

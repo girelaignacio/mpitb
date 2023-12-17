@@ -248,13 +248,13 @@ coef(M0)
 #> Area.Rural              25  0.12149484
 confint(M0, parm = "coefficient", level = 0.95)
 #>                   Cut-offs Lower Bound (95%) Upper Bound (95%)
-#> Overall.Overall         25        0.09726211        0.09837965
-#> Region.Hhohho           25        0.08261636        0.08621738
-#> Region.Manzini          25        0.06946688        0.07263259
-#> Region.Shiselweni       25        0.13291431        0.13666296
-#> Region.Lubombo          25        0.12626577        0.13386186
-#> Area.Urban              25        0.02967884        0.03250551
-#> Area.Rural              25        0.12071736        0.12227232
+#> Overall.Overall         25        0.08753278        0.10810897
+#> Region.Hhohho           25        0.06686762        0.10196612
+#> Region.Manzini          25        0.05554101        0.08655847
+#> Region.Shiselweni       25        0.11823502        0.15134224
+#> Region.Lubombo          25        0.09828709        0.16184054
+#> Area.Urban              25        0.01798542        0.04419893
+#> Area.Rural              25        0.10912826        0.13386142
 ```
 
 In addition, if the user wants to estimate all the measures at once,

@@ -1,13 +1,13 @@
 #' Set the specification of the project
 #'
-#' @param data `survey.design` object
-#' @param indicators Vector or a List.
-#' @param weights Weights of each indicator.
-#' @param K Numerical. Vector of poverty cut-offs. Can be values between 1 and 100.
-#' @param subgroup Character.
-#' @param year Character.
-#' @param name Character.
-#' @param description Character.
+#' @param data Input data, a `survey.design` class object where a complex survey design was previously specified. Can be a matrix but it is coerced to a `survey.design` class assuming equal probabilities.
+#' @param indicators A character vector containing the names of the indicators. This character vector should belong to columns names of `data`.
+#' @param weights A numerical vector representing the weights of each indicator. Should have the same length as `indicators` vector. Should sum up to 1. Default sets the same weight to each indicator
+#' @param K A numerical vector representing the poverty cut-offs. Should be values between 1 and 100. Default is 1, i.e., deprivations are not censored.
+#' @param subgroup A character vector containing the names of the populations subgroup of interest. This character vector should belong to columns names of `data`.
+#' @param year A character object with the name of the column in `data` containing information about temporal information for analysis of changes over time.
+#' @param name A character object in which it can be specified a name for the project.
+#' @param description A character object in which it can be specified a brief description for the project.
 #' @param ... other arguments
 #'
 #' @return `mpitb_set` object
@@ -57,8 +57,8 @@ mpitb.set <- function(data, indicators, weights, K = 1, subgroup = NULL, year = 
 
     ### `weights` argument
       ## check if `weights` missing argument
-  if (missing(weights)) {
-    warning("`weights` not found. An equal weighting scheme is assumed between all indicators.")
+  if (missing(weights) | weights == "equal") {
+    warning("An equal weighting scheme is assumed between all indicators.")
     weights <- rep(1/length(indicators), length(indicators))
     }
       ## check if `weights` is numeric
@@ -85,6 +85,7 @@ mpitb.set <- function(data, indicators, weights, K = 1, subgroup = NULL, year = 
     subgroup <- c("Total", subgroup)
     # The total observations in the data are interpreted as a subgroup
     } else {subgroup <- c("Total")}
+  # Coerce as factor!
 
     ### `year` argument
   if (!is.null(year)) {
@@ -117,18 +118,16 @@ mpitb.set <- function(data, indicators, weights, K = 1, subgroup = NULL, year = 
   G0_w <- weighted.G0.matrix(G0, weights)
 
   # Calculate the deprivations score ####
-  # cens.score <- numeric: Deprivations score
-  cens.score <- deprivations.score(G0_w)
+  c.score <- deprivations.score(G0_w)
   # add deprivations score to survey variables data frame
-  data <- update.survey.design(data, c.score = cens.score)
+  data <- update.survey.design(data, c.score = c.score)
 
   # Define names and class ####
   set <- list()
   set$data <- data
-  # check if name is character
+
   attr(set, "name") <- name
 
-  # check if description is a character
   attr(set, "description") <- description
 
   set$year <- unique(year)
@@ -146,36 +145,4 @@ mpitb.set <- function(data, indicators, weights, K = 1, subgroup = NULL, year = 
   return(set)
 }
 
-#' print() method for "mpitb_set" class
-#'
-#' @param x An object of class "mpitb_set"
-#' @param ... Other arguments passed to or from other methods
-#'
-#' @export
-print.mpitb_set <- function(x, ...) {
-  cat("--- Specification --- \n",
-      "Name: ", attr(x,"name"),"\n",
-      "Weighting scheme: ", attr(x$weights,"scheme"),"\n",
-      "Description: ", attr(x,"description"),"\n\n"
-  )
 
-  cat("--- Survey design --- \n")
-  cat(dim(x$data)[1], "observations\n")
-  print(x$data)
-
-  cat("\n--- Parameters ---\n",
-      "Cut-offs: ", length(x$K), "(",x$K,")\n",
-      "Indicators: ",length(x$indicators),"\n")
-
-  cat("\n--- Number of subgroups ---\n")
-  for (i in x$subgroup[-1]){
-    cat(i,":", length(levels(x$data$variables[,i])), "levels\n\n\n")
-  }
-
-  missings <- apply(X = x$data$variables[,x$indicators],MARGIN = 2,FUN = function(x) sum(is.na(x)))
-  if (sum(missings) == 0)
-  {cat("No missing values found\n")}
-  else{cat( sum(missings), "missing values found\n")}
-
-  invisible(x)
-}
