@@ -24,7 +24,7 @@ print.mpitb_set <- function(x, ...) {
     cat(i,":", length(levels(x$data$variables[,i])), "levels\n\n\n")
   }
 
-  missings <- apply(x = x$data$variables[,x$indicators], MARGIN = 2,FUN = function(x) sum(is.na(x)))
+  missings <- apply(X = x$data$variables[,x$indicators], MARGIN = 2,FUN = function(x) sum(is.na(x)))
   if (sum(missings) == 0)
   {cat("No missing values found\n")}
   else{cat( sum(missings), "missing values found\n")}
