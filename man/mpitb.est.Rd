@@ -12,7 +12,7 @@ mpitb.est(object, measures, ...)
 \arguments{
 \item{object}{a `mpitb_set` class object}
 
-\item{measures}{Character vector with the desired AF measures. By default: c("M0", "A", "H", "Headcounts")}
+\item{measures}{a character vector with the desired AF measures. By default: c("M0", "A", "H", "Headcounts")}
 
 \item{...}{other arguments}
 }

@@ -1,7 +1,7 @@
 #' Estimation of Alkire-Foster measures
 #'
 #' @param object a `mpitb_set` class object
-#' @param measures Character vector with the desired AF measures. By default: c("M0", "A", "H", "Headcounts")
+#' @param measures a character vector with the desired AF measures. By default: c("M0", "A", "H", "Headcounts")
 #' @param ... other arguments
 #'
 #' @return
