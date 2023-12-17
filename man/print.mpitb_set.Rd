@@ -4,10 +4,10 @@
 \alias{print.mpitb_set}
 \title{print() method for "mpitb_set" class}
 \usage{
-\method{print}{mpitb_set}(object, ...)
+\method{print}{mpitb_set}(x, ...)
 }
 \arguments{
-\item{object}{An object of class "mpitb_set"}
+\item{x}{An object of class "mpitb_set"}
 
 \item{...}{Other arguments passed to or from other methods}
 }

@@ -17,9 +17,9 @@
 #' indicators <- c("Water","Assets","School","Nutrition")
 #' weights <- c(1/6,1/6,1/3,1/3)
 #' cutoff <- c(25,50)
-#' over <- c("Region","Area")
+#' subgroup <- c("Region","Area")
 #'
-#' set <- mpitb.set(data, indicators, cutoff, weights, over,
+#' set <- mpitb.set(data, indicators, weights, cutoff, subgroup,
 #'       name = "Example", desc = "SWZ MICS survey 2014")
 #'
 #' M0 <- mpitb.M0(set)
@@ -30,19 +30,19 @@ mpitb.M0 <- function(object, ...) UseMethod("mpitb.M0", object)
 #' @export
 mpitb.M0.mpitb_set <- function(object, ...){
   data <- object$data
-  over <- object$over
-  c.score <- data$variables$c.score
+  subgroup <- object$subgroup
+  score <- data$variables$score
   K <- object$K
   output <- vector("list", length = length(K))
   for (i in 1:length(K)){
     k <- K[i]
-    censored.c.score <- censored.deprivations.score(c.score, k)
-    data <- update.survey.design(data, c.k = censored.c.score)
-    mylist <- svybys(survey::make.formula("c.k"), bys = survey::make.formula(over), data, survey::svymean)
+    censored.score <- censored.deprivations.score(score, k)
+    data <- update.survey.design(data, score.k = censored.score)
+    by.list <- svybys(survey::make.formula("score.k"), bys = survey::make.formula(subgroup), data, survey::svymean)
 
-    M0 <- lapply(mylist, FUN = function(x) mpitb.measure(x, data))
+    M0 <- lapply(by.list, FUN = function(x) mpitb.measure(x, data))
 
-    names(M0) <- over
+    names(M0) <- subgroup
     attr(M0, "k") <- k*100
     output[[i]] <- M0
   }

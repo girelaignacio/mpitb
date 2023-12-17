@@ -57,7 +57,7 @@ mpitb.set <- function(data, indicators, weights, K = 1, subgroup = NULL, year = 
 
     ### `weights` argument
       ## check if `weights` missing argument
-  if (missing(weights) | weights == "equal") {
+  if (missing(weights)) {
     warning("An equal weighting scheme is assumed between all indicators.")
     weights <- rep(1/length(indicators), length(indicators))
     }
@@ -118,9 +118,9 @@ mpitb.set <- function(data, indicators, weights, K = 1, subgroup = NULL, year = 
   G0_w <- weighted.G0.matrix(G0, weights)
 
   # Calculate the deprivations score ####
-  c.score <- deprivations.score(G0_w)
+  deprivations.score <- deprivations.score(G0_w)
   # add deprivations score to survey variables data frame
-  data <- update.survey.design(data, c.score = c.score)
+  data <- update.survey.design(data, score = deprivations.score)
 
   # Define names and class ####
   set <- list()
