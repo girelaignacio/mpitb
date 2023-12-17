@@ -20,5 +20,5 @@ mpitb.headcounts(object, ...)
 `mpitb_headcounts` and `mpitb_measure` class
 }
 \description{
-Calculate the censored headcount ratios for each indicator or the proportion of people who are multidimensionally poor and deprived in each indicator
+Calculate the censored headcount ratios for each indicator or the proportion of people who are multidimensional poor and deprived in each indicator.
 }

@@ -2,16 +2,25 @@
 % Please edit documentation in R/operations.R
 \name{deprivations.score}
 \alias{deprivations.score}
-\title{Calculate deprivations score from the deprivation matrix}
+\title{Calculate deprivations score from the deprivations matrix}
 \usage{
-deprivations.score(x)
+deprivations.score(X)
 }
 \arguments{
-\item{x}{Numeric Matrix}
+\item{X}{a numeric matrix containing the weighted deprivations matrix, i.e., a matrix with binary entries where 0 means no deprivations whereas 1 means that the individual suffers deprivations of that indicator.}
 }
 \value{
-A numeric vector
+a numeric vector containing the deprivations score.
 }
 \description{
-Calculate deprivations score from the deprivation matrix
+Calculate deprivations score from the deprivations matrix
+}
+\examples{
+library(mpitb)
+data <- survey::svydesign(id=~PSU, weights = ~Weight, strata = ~Strata,
+        data = swz_mics14)
+indicators <- c("Water","Assets","School","Nutrition")
+weights <- c(1/6,1/6,1/3,1/3)
+
+score <- deprivations.score(G0.matrix(data, indicators))
 }
