@@ -16,8 +16,19 @@ You can install the development version of mpitb from
 ``` r
 # install.packages("devtools")
 devtools::install_github("girelaignacio/mpitb")
-#> Skipping install of 'mpitb' from a github remote, the SHA1 (c0713ed0) has not changed since last install.
-#>   Use `force = TRUE` to force installation
+#> Downloading GitHub repo girelaignacio/mpitb@HEAD
+#> 
+#> ── R CMD build ─────────────────────────────────────────────────────────────────
+#>       ✔  checking for file 'C:\Users\girel\AppData\Local\Temp\RtmpMfe535\remotes19345ebc2bfa\girelaignacio-mpitb-3e3901e/DESCRIPTION'
+#>       ─  preparing 'mpitb': (1.9s)
+#>    checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
+#>       ─  checking for LF line-endings in source and make files and shell scripts
+#>   ─  checking for empty or unneeded directories
+#>       ─  building 'mpitb_0.2.0.tar.gz'
+#>      
+#> 
+#> Installing package into 'C:/Users/girel/AppData/Local/R/win-library/4.3'
+#> (as 'lib' is unspecified)
 ```
 
 This process may take time the first time.
