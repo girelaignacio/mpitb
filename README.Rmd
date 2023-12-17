@@ -118,8 +118,8 @@ confint(M0, parm = "coefficient", level = 0.95)
 In addition, if the user wants to estimate all the measures at once, she/he can use `mpitb.est` function
 
 ```{r mitb.est}
-estimation <- mpitb.est(set)
+#estimation <- mpitb.est(set)
 # All measures are save in a list. We can make use of other functions by accessing to names of the list
-names(estimation)
-as.data.frame(estimation$M0)
+#names(estimation)
+#as.data.frame(estimation$M0)
 ```

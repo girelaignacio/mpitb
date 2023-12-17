@@ -16,6 +16,8 @@ You can install the development version of mpitb from
 ``` r
 # install.packages("devtools")
 devtools::install_github("girelaignacio/mpitb")
+#> Skipping install of 'mpitb' from a github remote, the SHA1 (c0713ed0) has not changed since last install.
+#>   Use `force = TRUE` to force installation
 ```
 
 This process may take time the first time.
@@ -98,8 +100,11 @@ personal name and description of your setting.
 indicators <- c("Nutrition","School","Water","Assets")
 weights <- c(1/3,1/3,1/6,1/6)
 cutoff <- c(25)
-over <- c("Region","Area")
-set <- mpitb.set(data, indicators, cutoff, weights, over, name = "SWZ2014 Example", desc = "This is an example taken from the OPHI Summer School 2022")
+subgroup <- c("Region","Area")
+set <- mpitb.set(data, indicators, weights, cutoff, subgroup, name = "SWZ2014 Example", desc = "This is an example taken from the OPHI Summer School 2022")
+#> mpitb.set(data = data, indicators = indicators, weights = weights, 
+#>     K = cutoff, subgroup = subgroup, name = "SWZ2014 Example", 
+#>     description = "This is an example taken from the OPHI Summer School 2022")
 print(set)
 #> --- Specification --- 
 #>  Name:  SWZ2014 Example 
@@ -110,7 +115,7 @@ print(set)
 #> 20739 observations
 #> Stratified 1 - level Cluster Sampling design (with replacement)
 #> With (347) clusters.
-#> mpitb.set(data, indicators, cutoff, weights, over, name = "SWZ2014 Example", 
+#> mpitb.set(data, indicators, weights, cutoff, subgroup, name = "SWZ2014 Example", 
 #>     desc = "This is an example taken from the OPHI Summer School 2022")
 #> 
 #> --- Parameters ---
@@ -127,7 +132,7 @@ print(set)
 #> No missing values found
 ```
 
-It is also possible to view a summery of our settings where further
+It is also possible to view a summary of our settings where further
 information can be observed such as the distribution of the population,
 the uncensored headcount ratios of the indicators in the whole country,
 etc…
@@ -165,17 +170,17 @@ standard errors as an `atribute` of that element.
 ``` r
 M0
 #> [[1]]
-#> [[1]]$Overall
-#>    Overall 
+#> [[1]]$Total
+#>      Total 
 #> 0.09782088 
 #> attr(,"over")
-#> [1] "Overall"
+#> [1] "Total"
 #> attr(,"se")
-#>     Overall 
+#>       Total 
 #> 0.005230329 
 #> attr(,"df")
-#> Overall 
-#>     339 
+#> Total 
+#>   339 
 #> 
 #> [[1]]$Region
 #>     Hhohho    Manzini Shiselweni    Lubombo 
@@ -223,13 +228,13 @@ the user). Here is an example:
 ``` r
 M0.results <- as.data.frame(M0)
 head(M0.results)
-#>      Over      Level Cut-off Coefficient Standard Error
-#> 1 Overall    Overall      25  0.09782088    0.005230329
-#> 2  Region     Hhohho      25  0.08441687    0.008838600
-#> 3  Region    Manzini      25  0.07104974    0.007811974
-#> 4  Region Shiselweni      25  0.13478863    0.008313157
-#> 5  Region    Lubombo      25  0.13006382    0.015928619
-#> 6    Area      Urban      25  0.03109217    0.006592045
+#>     Over      Level Cut-off Coefficient Standard Error
+#> 1  Total      Total      25  0.09782088    0.005230329
+#> 2 Region     Hhohho      25  0.08441687    0.008838600
+#> 3 Region    Manzini      25  0.07104974    0.007811974
+#> 4 Region Shiselweni      25  0.13478863    0.008313157
+#> 5 Region    Lubombo      25  0.13006382    0.015928619
+#> 6   Area      Urban      25  0.03109217    0.006592045
 ```
 
 Other typical R methods are included such as `coef()` and `confint()` to
@@ -239,7 +244,7 @@ poverty measures, respectively.
 ``` r
 coef(M0)
 #>                   Cut-offs Coefficient
-#> Overall.Overall         25  0.09782088
+#> Total.Total             25  0.09782088
 #> Region.Hhohho           25  0.08441687
 #> Region.Manzini          25  0.07104974
 #> Region.Shiselweni       25  0.13478863
@@ -248,7 +253,7 @@ coef(M0)
 #> Area.Rural              25  0.12149484
 confint(M0, parm = "coefficient", level = 0.95)
 #>                   Cut-offs Lower Bound (95%) Upper Bound (95%)
-#> Overall.Overall         25        0.08753278        0.10810897
+#> Total.Total             25        0.08753278        0.10810897
 #> Region.Hhohho           25        0.06686762        0.10196612
 #> Region.Manzini          25        0.05554101        0.08655847
 #> Region.Shiselweni       25        0.11823502        0.15134224
@@ -261,17 +266,8 @@ In addition, if the user wants to estimate all the measures at once,
 she/he can use `mpitb.est` function
 
 ``` r
-estimation <- mpitb.est(set)
+#estimation <- mpitb.est(set)
 # All measures are save in a list. We can make use of other functions by accessing to names of the list
-names(estimation)
-#> [1] "M0"         "H"          "A"          "Headcounts"
-as.data.frame(estimation$M0)
-#>      Over      Level Cut-off Coefficient Standard Error
-#> 1 Overall    Overall      25  0.09782088    0.005230329
-#> 2  Region     Hhohho      25  0.08441687    0.008838600
-#> 3  Region    Manzini      25  0.07104974    0.007811974
-#> 4  Region Shiselweni      25  0.13478863    0.008313157
-#> 5  Region    Lubombo      25  0.13006382    0.015928619
-#> 6    Area      Urban      25  0.03109217    0.006592045
-#> 7    Area      Rural      25  0.12149484    0.006279293
+#names(estimation)
+#as.data.frame(estimation$M0)
 ```

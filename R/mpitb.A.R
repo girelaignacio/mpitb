@@ -17,20 +17,20 @@ mpitb.A <- function(object, ...) UseMethod("mpitb.A", object)
 #' @export
 mpitb.A.mpitb_set <- function(object, ...){
   data <- object$data
-  over <- object$over
-  c.score <- data$variables$c.score
+  subgroup <- object$subgroup
+  score <- data$variables$score
   K <- object$K
   output <- vector("list", length = length(K))
   for (i in 1:length(K)){
     k <- K[i]
-    poor.mpi <- as.factor(ifelse(c.score >= k,1,0))
-    censored.c.score <- censored.deprivations.score(c.score, k)
-    data <- update.survey.design(data, c.k = censored.c.score, mpi.k = poor.mpi)
-    mylist <- svybys(survey::make.formula("c.k"), survey::make.formula(over), design = subset(data, data$variables[,'mpi.k']==1), survey::svymean)
+    poor.mpi <- as.factor(ifelse(score >= k,1,0))
+    censored.score <- censored.deprivations.score(score, k)
+    data <- update.survey.design(data, score.k = censored.score, mpi.k = poor.mpi)
+    mylist <- svybys(survey::make.formula("score.k"), survey::make.formula(subgroup), design = subset(data, data$variables[,'mpi.k']==1), survey::svymean)
 
     A <- lapply(mylist, FUN = function(x) mpitb.measure(x, data))
 
-    names(A) <- over
+    names(A) <- subgroup
 
     A <- lapply(A, "*",100)
 
