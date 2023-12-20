@@ -23,18 +23,43 @@ as.data.frame.mpitb_est <- function(x, row.names = NULL, optional = FALSE, ...) 
   mpitb_est.df
 }
 
-convert2data.frame <- function(X) {
+convert.to.data.frame_columns <- function(X) {
+  # Create subgroups columns ####
   len.levels <- sapply(X, FUN = function(x) length(x))
-  over.names <- names(sapply(X, FUN = function(x) length(x)))
+  subg.names <- names(sapply(X, FUN = function(x) length(x)))
+  col.subg <- rep(subg.names, len.levels)
+  # Create cut-offs columns ####
   col.k <- rep(attr(X,"k"), sum(sapply(X, FUN = function(x) length(x))))
-  col.over <- rep(over.names, len.levels)
-  col.levels <- unlist(sapply(X, FUN = function(x) names(x)), use.names = F)
-  df.k <- cbind.data.frame(col.over, col.levels, col.k)
-  col.coeff <- matrix(unlist(X) , nrow = length(col.over))
+  # Create levels columns ####
+  col.levels.global <- unlist(sapply(X, FUN = function(x) names(x)), use.names = F)
+  col.levels <- sub('\\:.*',"",col.levels.global)
+  col.indicators <- sub('.*:','',col.levels.global)
+  dataframe.k <- cbind.data.frame(col.subg, col.levels, col.indicators ,col.k)
+  col.coeff <- matrix(unlist(X) , nrow = length(col.subg))
   col.se <- unlist(sapply(X, FUN = function(x) attr(x,"se")), use.names = F)
-  df.k <- cbind(df.k,col.coeff, col.se)
-  colnames(df.k) <- c("Over","Level","Cut-off","Coefficient","Standard Error")
-  return(df.k)
+  dataframe.k <- cbind(dataframe.k,col.coeff, col.se)
+  colnames(dataframe.k) <- c("Subgroup","Level","Indicator","Cut-off","Coefficient","Standard Error")
+  return(dataframe.k)
+}
+
+convert.to.data.frame_rows <- function(X) {
+  # Create subgroups columns ####
+  len.levels <- sapply(X, FUN = function(x) length(x))
+  subg.names <- names(sapply(X, FUN = function(x) length(x)))
+  col.subg <- rep(subg.names, len.levels)
+  # Create cut-offs columns ####
+  col.k <- rep(attr(X,"k"), sum(sapply(X, FUN = function(x) length(x))))
+  # Create levels columns ####
+  col.levels <- unlist(sapply(X, FUN = function(x) names(x)), use.names = F)
+    # Join
+  dataframe.k <- cbind.data.frame(col.subg, col.levels, col.indicators ,col.k)
+  # Create levels with coefficients
+  col.coeff <- matrix(unlist(X) , nrow = length(col.subg))
+  # Create levels with standard errors
+  col.se <- unlist(sapply(X, FUN = function(x) attr(x,"se")), use.names = F)
+  dataframe.k <- cbind(dataframe.k,col.coeff, col.se)
+  colnames(dataframe.k) <- c("Subgroup","Level","Cut-off","Coefficient","Standard Error")
+  return(dataframe.k)
 }
 
 

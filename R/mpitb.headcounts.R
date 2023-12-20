@@ -36,7 +36,7 @@ mpitb.headcounts.mpitb_set <- function(object, censored = FALSE, ...) {
       K <- object$K
       output <- vector("list", length = length(K))
       for (i in 1:length(K)){
-        k <- K[i]
+        k <- K[i]/100
           #### Censored deprivation matrix
         cens.data <- object$data
         mpi.poor <- cens.data$variables$score >= k
@@ -53,7 +53,7 @@ mpitb.headcounts.mpitb_set <- function(object, censored = FALSE, ...) {
 
         Hj <- lapply(mylist, FUN = function(x) mpitb.measure(x, cens.data))
         names(Hj) <- subgroup
-        attr(Hj, "k") <- k
+        attr(Hj, "k") <- k*100
         output[[i]] <- Hj
      ####
       }

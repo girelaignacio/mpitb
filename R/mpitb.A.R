@@ -22,7 +22,7 @@ mpitb.A.mpitb_set <- function(object, ...){
   K <- object$K
   output <- vector("list", length = length(K))
   for (i in 1:length(K)){
-    k <- K[i]
+    k <- K[i]/100
     poor.mpi <- as.factor(ifelse(score >= k,1,0))
     censored.score <- censored.deprivations.score(score, k)
     data <- update.survey.design(data, score.k = censored.score, mpi.k = poor.mpi)

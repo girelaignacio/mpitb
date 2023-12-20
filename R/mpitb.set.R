@@ -107,7 +107,7 @@ mpitb.set <- function(data, indicators, weights, K = 1, subgroup = NULL, year = 
 
 
     #.transformation of arguments and variables ####
-  K <- change.K.scale(K)
+  #K <- change.K.scale(K)
 
   data[,"Total"] <- "Total"
 

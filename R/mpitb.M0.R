@@ -35,7 +35,7 @@ mpitb.M0.mpitb_set <- function(object, ...){
   K <- object$K
   output <- vector("list", length = length(K))
   for (i in 1:length(K)){
-    k <- K[i]
+    k <- K[i]/100
     censored.score <- censored.deprivations.score(score, k)
     data <- update.survey.design(data, score.k = censored.score)
     by.list <- svybys(survey::make.formula("score.k"), bys = survey::make.formula(subgroup), data, survey::svymean)
