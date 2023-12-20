@@ -3,12 +3,6 @@ mpitb.measure <- function(X, data){
   se <- suppressWarnings(sqrt(diag(stats::vcov(X))))
   over <- names(X)[1]
   dfs <- sapply(rownames(X), FUN=function(x) survey::degf(subset(data,data$variables[, over] == x)))
-  #dfs <- sapply(rownames(X), FUN=function(x) dim(subset(data,data$variables[, over] == x))[1])
-  #fac <- qt(level + (1 - level)/2, df=dfs) #¿qt(0.975,df=n-1)*se/sqrt(n)?
-  #lb <- b - fac * se
-  #ub <- b + fac * se
-  #b <- list(b*100)
-  #b <- cbind(b,se,lb,ub)
   attr(b,"over") <- over
   attr(b,"se") <- se
   attr(b, "df") <- dfs
@@ -52,7 +46,7 @@ convert.to.data.frame_rows <- function(X) {
   # Create levels columns ####
   col.levels <- unlist(sapply(X, FUN = function(x) names(x)), use.names = F)
     # Join
-  dataframe.k <- cbind.data.frame(col.subg, col.levels, col.indicators ,col.k)
+  dataframe.k <- cbind.data.frame(col.subg, col.levels ,col.k)
   # Create levels with coefficients
   col.coeff <- matrix(unlist(X) , nrow = length(col.subg))
   # Create levels with standard errors
@@ -61,14 +55,6 @@ convert.to.data.frame_rows <- function(X) {
   colnames(dataframe.k) <- c("Subgroup","Level","Cut-off","Coefficient","Standard Error")
   return(dataframe.k)
 }
-
-
-
-change.K.scale <- function(x) {
-  x <- x/100
-  return(x)
-}
-
 
 update.survey.design <- function(object, ...) {
   dots <- substitute(list(...))[-1]

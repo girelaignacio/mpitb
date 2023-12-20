@@ -7,7 +7,7 @@
 #'
 #' @export
 as.data.frame.mpitb_measure <- function(x, row.names = NULL, optional = FALSE, ...) {
-  if (any(class(uncensored.headcounts) == "mpitb_headcounts")){
+  if (any(class(x) == "mpitb_headcounts")){
     list.k <- lapply(x, FUN = convert.to.data.frame_columns)
   } else {list.k <- lapply(x, FUN = convert.to.data.frame_rows)}
   mpitb_measure.df <- do.call("rbind", list.k)
