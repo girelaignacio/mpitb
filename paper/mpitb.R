@@ -8,8 +8,8 @@ library(ggplot2)
 library(palmerpenguins)
 
 
-## ----penguins-alison, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "----
-knitr::include_graphics("penguins.png")
+## ----penguins-alison, eval=FALSE, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "----
+#> knitr::include_graphics("penguins.png")
 
 
 ## ----library, echo = TRUE-----------------------------------------------------

@@ -25,7 +25,7 @@ mpitb.H.mpitb_set <- function(object, ...){
     k <- K[i]/100
     poor.mpi <- ifelse(score >= k,1,0)
     data <- update.survey.design(data, mpi.k = poor.mpi)
-    mylist <- svybys(survey::make.formula("mpi.k"), bys = survey::make.formula(subgroup), data, survey::svymean)
+    mylist <- survey::svybys(survey::make.formula("mpi.k"), bys = survey::make.formula(subgroup), data, survey::svymean)
 
     H <- lapply(mylist, FUN = function(x) mpitb.measure(x, data))
 

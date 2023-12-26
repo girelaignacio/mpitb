@@ -9,11 +9,11 @@ mpitb.set(
   indicators,
   weights,
   K = 1,
+  ...,
   subgroup = NULL,
-  year = NULL,
+  time = NULL,
   name = "Unnamed project",
-  description = "No description",
-  ...
+  description = "No description"
 )
 }
 \arguments{
@@ -25,15 +25,15 @@ mpitb.set(
 
 \item{K}{A numerical vector representing the poverty cut-offs. Should be values between 1 and 100. Default is 1, i.e., deprivations are not censored.}
 
+\item{...}{other arguments}
+
 \item{subgroup}{A character vector containing the names of the populations subgroup of interest. This character vector should belong to columns names of `data`.}
 
-\item{year}{A character object with the name of the column in `data` containing information about temporal information for analysis of changes over time.}
+\item{time}{A character object with the name of the column in `data` containing information about temporal information for analysis of changes over time.}
 
 \item{name}{A character object in which it can be specified a name for the project.}
 
 \item{description}{A character object in which it can be specified a brief description for the project.}
-
-\item{...}{other arguments}
 }
 \value{
 `mpitb_set` object

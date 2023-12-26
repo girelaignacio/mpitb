@@ -13,14 +13,12 @@ This article presents \pkg{mpitb}, an R package for calculating multidimensional
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-Although poverty is widely understood as the inability to achieve basic standards of living, the measurement of poverty has traditionally been based on monetary deficits. However, over the past two decades, there has been a significant increase in the use of multidimensional approaches to measuring poverty in an attempt to capture different dimensions of this phenomenon. In this context, the dual-cut-off-counting measurement approach proposed by Alkire and Foster (2011) (AF, hereafter) has become particularly popular due to its flexibility and ability to inform policy. For example, the AF method is the basis of the global Multidimensional Poverty Index (MPI) which is yearly published by the United Nations Development Programme and the Oxford Poverty and Human Development Initiative (\textbf{UNDP-OPHI\_2021?}). In addition, many countries are developing their own official MPIs to track poverty reduction progress using the AF method.
+Although poverty is widely understood as the inability to achieve basic standards of living, the measurement of poverty has traditionally been based on monetary deficits. However, over the past two decades, there has been a significant increase in the use of multidimensional approaches to measuring poverty in an attempt to capture different dimensions of this phenomenon. In this context, the dual-cut-off-counting measurement approach proposed by Alkire and Foster (2011) (AF, hereafter) has become particularly popular due to its flexibility and ability to inform policy. For example, the AF method is the basis of the global Multidimensional Poverty Index (MPI) which is yearly published by the United Nations Development Programme and the Oxford Poverty and Human Development Initiative (UNDP and OPHI 2022). In addition, many countries are developing their own official MPIs to track poverty reduction progress using the AF method.
 
-This measurement approach stands out both for providing an extensive policy information platform and remaining relatively understandable by the general public.
+This measurement approach stands out both for providing an extensive policy information platform and remaining relatively understandable by the general public. In other words, AF measures point estimates entail simple algebraic operations. Some R packages that computes AF measures include \CRANpkg{MPI} (Kukiattikun and Chainarong 2022) and \CRANpkg{mpindex} (Abdulsamad 2023). Notwithstanding, these packages do not account for the complex survey design of micro data and, as a result, assume the data was obtained through a simple random sampling which is barely the case of household surveys. Certainly, not considering the complex survey design affects further statistical inference exercises of interest. Namely, is multidimensional poverty in one subgroup of the population greater than another? Has poverty been reduced over time?
 
-Despite the increasing popularity of this approach, calculating AF measures in practice is still a challenging task due to the lack of an integrated framework on how to generate, analyse and present various poverty estimates together. Motivated by this problem, OPHI launched a Stata package (Suppa 2023) with the aim of facilitating the production process of the global MPI to researchers, analysts and practitioners. To do so, Suppa (2023) (continue\ldots).
+Therefore, calculating AF measures in practice is still a challenging task Motivated by this problem, OPHI launched a Stata package (Suppa 2023) with the aim of providing a framework that mirrors the production process of the well-known global MPI to researchers, analysts and practitioners. To do so, Suppa (2023) (continue\ldots).
 This package adapts this framework for R users.
-
-The AF method stands out both for providing an extensive policy information platform and remaining relatively understandable by the general public. Hence, calculating the point estimates underlies simple linear algebra operations. Some very recent R packages that computes AF measures include \CRANpkg{MPI} (Kukiattikun and Chainarong 2022) and \CRANpkg{mpindex} (Abdulsamad 2023). Notwithstanding, these packages do not account for the complex survey designs from where data are drawn. This issue affects the estimation of the standard errors and, consequently, impacts further statistical inference exercises of interest. Namely, is multidimensional poverty in one subgroup of the population greater than another? Has poverty been reduced over time?
 
 \hypertarget{measuring-multidimensional-poverty-the-alkire-foster-method}{%
 \section{Measuring multidimensional poverty: the Alkire-Foster Method}\label{measuring-multidimensional-poverty-the-alkire-foster-method}}
@@ -34,12 +32,6 @@ The AF method stands out both for providing an extensive policy information plat
 \section{Applications}\label{applications}}
 
 Suppa (2023) provide a set of examples \ldots. With the view of consistency, we apply \ldots{} on the same data\ldots{}
-
-The \CRANpkg{palmerpenguins} data features three penguin species which has a lovely illustration by Alison Horst in Figure \ref{fig:penguins-alison}.
-
-\begin{figure}
-\includegraphics[width=1\linewidth,height=0.3\textheight]{penguins} \caption{Artwork by \@allison\_horst}\label{fig:penguins-alison}
-\end{figure}
 
 \begin{verbatim}
 library(mpitb)
@@ -115,6 +107,9 @@ Kukiattikun, Kittiya, and Chainarong Chainarong. 2022. \emph{MPI: Computation of
 
 \leavevmode\vadjust pre{\hypertarget{ref-mpitb_Stata}{}}%
 Suppa, Nicolai. 2023. {``{m}pitb: A Toolbox for Multidimensional Poverty Indices.''} \emph{The Stata Journal} 23 (3): 625--57. \url{https://doi.org/10.1177/1536867X231195286}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-gMPI-report2022}{}}%
+UNDP, and OPHI. 2022. {``\href{}{2022 Global Multidimensional Poverty Index (MPI)}.''} \emph{UNDP (United Nations Development Programme)}.
 
 \end{CSLReferences}
 

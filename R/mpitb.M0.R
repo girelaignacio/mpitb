@@ -38,7 +38,9 @@ mpitb.M0.mpitb_set <- function(object, ...){
     k <- K[i]/100
     censored.score <- censored.deprivations.score(score, k)
     data <- update.survey.design(data, score.k = censored.score)
-    by.list <- svybys(survey::make.formula("score.k"), bys = survey::make.formula(subgroup), data, survey::svymean)
+
+    #by.list <- survey::svybys(survey::make.formula("score.k"), bys = survey::make.formula(subgroup), data, survey::svymean)
+    by.list <- survey::svybys(survey::make.formula("score.k"), bys = survey::make.formula(subgroup), data, survey::svyciprop, vartype = c("se","ci"))
 
     M0 <- lapply(by.list, FUN = function(x) mpitb.measure(x, data))
 

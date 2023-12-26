@@ -5,3 +5,4 @@
 ^paper$
 ^example\.R$
 ^extra\.R$
+^cran-comments\.md$

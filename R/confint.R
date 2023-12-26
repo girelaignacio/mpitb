@@ -28,26 +28,25 @@
 
 confint.mpitb_measure <- function(object, parm, level, ...){
 
-  if (!(parm == "coefficient")){stop("Only for coefficients")}
+  stopifnot("`confint` method only available for `parm = 'coefficient'`" = parm == "coefficient")
 
-  #cutoffs <- lapply(object, FUN = function(x) rep(attr(x,"k"), sum(sapply(x, FUN = function(y) length(y)))))
-  #cutoffs <- do.call("c",cutoffs)
-  cutoffs <- retrieve.cutoffs(object)
+  #cutoffs <- retrieve.cutoffs(object)
 
-  #b <- unlist(object)
-  b <- retrieve.coefficients(object)
+  #b <- retrieve.coefficients(object)
 
-  #se <- unlist(lapply(object, FUN = function(X) unlist(sapply(X, FUN = function(x) attr(x,"se")), use.names = F)))
-  se <- retrieve.se(object)
+  #se <- retrieve.se(object)
 
-  #degfs <- unlist(lapply(object, FUN = function(X) unlist(sapply(X, FUN = function(x) attr(x,"df")), use.names = F)))
-  degfs <- retrieve.df(object)
-  alpha <- 1-level
-  t.score <- stats::qt(p=alpha/2, df=degfs-1,lower.tail=FALSE)
-  lb <- b - t.score * se
-  ub <- b + t.score * se
+  #degfs <- retrieve.df(object)
+  #alpha <- 1-level
+  #t.score <- stats::qt(p=alpha/2, df=degfs-1,lower.tail=FALSE)
+  #lb <- b - t.score * se
+  #ub <- b + t.score * se
 
   # p-value <- pt(b[1]/se[1], degfs[1]-1, lower.tail = FALSE)*2
+
+  lb <- unlist(lapply(object, FUN = function(X) unlist(sapply(X, FUN = function(x) attr(x,"lb")), use.names = F)))
+  ub <- unlist(lapply(object, FUN = function(X) unlist(sapply(X, FUN = function(x) attr(x,"ub")), use.names = F)))
+
 
   out <- cbind(cutoffs,lb,ub)
   colnames(out) <- c("Cut-offs",paste("Lower Bound (",level*100,"%)", sep = ""), paste("Upper Bound (",level*100,"%)", sep = ""))
