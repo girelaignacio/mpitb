@@ -105,6 +105,12 @@ mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL, ti
       ## check if `description` is `character`
   stopifnot("`description` should be a `character`" = is.character(description))
 
+  #### Treat missing values ####
+  missings <- apply(X = data$variables[,indicators], MARGIN = 2, FUN = function(x) sum(is.na(x)))
+  if (sum(missings) != 0){
+    warning("There are missing values in certain indicators. By default, rows with missing indicators are dropped and standard errors cannot be calculated")
+    }
+
   # Add "Total" column. Treated as a subgroup.
   data[,"Total"] <- "Total"
 
@@ -120,7 +126,7 @@ mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL, ti
   # add deprivations score to survey variables data frame
   data <- update.survey.design(data, score = deprivations.score)
 
-  # Define names and class ####
+  #### Define names, class and attributes ####
   set <- list()
   set$data <- data
 
@@ -134,9 +140,10 @@ mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL, ti
   set$K <- K
 
   set$weights <- weights
-  attr(set$weights, "scheme") <- "equal"
 
   set$subgroup <- subgroup
+
+  attr(set, "missings") <- if(sum(missings)==0){NULL}else{missings}
 
   class(set) <- "mpitb_set"
 

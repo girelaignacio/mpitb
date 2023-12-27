@@ -15,7 +15,9 @@ library(palmerpenguins)
 ## ----library, echo = TRUE-----------------------------------------------------
 library(mpitb)
 
-data <- swz_mics14
+data <- syn_cdta
+
+data <- subset(data, t == 1)
 
 
 ## ----penguins-tab-interactive, eval = knitr::is_html_output(), layout = "l-body-outset"----

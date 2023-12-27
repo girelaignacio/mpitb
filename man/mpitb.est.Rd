@@ -5,17 +5,44 @@
 \alias{mpitb.est.mpitb_set}
 \title{Estimation of Alkire-Foster measures}
 \usage{
-mpitb.est(object, measures, ...)
+mpitb.est(object, ...)
 
-\method{mpitb.est}{mpitb_set}(object, measures = c("M0", "H", "A", "Headcounts"), ...)
+\method{mpitb.est}{mpitb_set}(
+  object,
+  measures = c("M0", "H", "A", "censored.headcounts", "headcounts"),
+  ...
+)
 }
 \arguments{
 \item{object}{a `mpitb_set` class object}
 
-\item{measures}{a character vector with the desired AF measures. By default: c("M0", "A", "H", "Headcounts")}
-
 \item{...}{other arguments}
+
+\item{measures}{a character vector with the desired AF measures. By default: c("M0", "A", "H", "Headcounts")}
+}
+\value{
+a `mpitb_est` class object which is a list with the same length as `measures` argument whose elements are `mpitb_measure` class objects of the desired AF measures
 }
 \description{
 Estimation of Alkire-Foster measures
+}
+\examples{
+library(mpitb)
+
+data_syn <- syn_cdta
+data_syn1 <- subset(data_syn, t == 1)
+data_syn1 <- survey::svydesign(id=~psu, weights = ~weight , strata = ~stratum, data = data_syn1)
+
+indicators <- c("d_nutr","d_cm","d_satt","d_educ", "d_elct","d_sani","d_wtr","d_hsg","d_ckfl","d_asst")
+weights <- c(1/6,1/6,1/6,1/6, 1/18,1/18,1/18,1/18,1/18,1/18)
+cutoff <- c(33,50)
+over <- c("region","area")
+set <- mpitb.set(data_syn1, indicators, weights, cutoff, subgroup = over, name = "syn_data", desc = "This is an example taken from the synthetic cleaned data from mpitb STATA package")
+
+# Asumme we want to calculate H and A measures
+
+estimations <- mpitb.est(set, measures = c("H","A"))
+class(estimations)
+length(estimations)
+
 }
