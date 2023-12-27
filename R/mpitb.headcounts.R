@@ -26,7 +26,7 @@ mpitb.headcounts.mpitb_set <- function(object, censored = FALSE, ...) {
     output <- vector("list", length = 1)
     mylist <- survey::svybys(survey::make.formula(indicators), bys = survey::make.formula(subgroup),data,survey::svymean)
 
-    Hj <- lapply(mylist, FUN = function(x) mpitb.measure(x, data))
+    Hj <- lapply(mylist, FUN = function(x) mpitb.measurebys(x, data))
     names(Hj) <- subgroup
     attr(Hj, "k") <- NA
     output[[1]] <- Hj
@@ -51,7 +51,7 @@ mpitb.headcounts.mpitb_set <- function(object, censored = FALSE, ...) {
 
         mylist <- survey::svybys(survey::make.formula(indicators), bys = survey::make.formula(subgroup), cens.data, survey::svymean)
 
-        Hj <- lapply(mylist, FUN = function(x) mpitb.measure(x, cens.data))
+        Hj <- lapply(mylist, FUN = function(x) mpitb.measurebys(x, cens.data))
         names(Hj) <- subgroup
         attr(Hj, "k") <- k*100
         output[[i]] <- Hj

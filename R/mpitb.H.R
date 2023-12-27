@@ -27,7 +27,7 @@ mpitb.H.mpitb_set <- function(object, ...){
     data <- update.survey.design(data, mpi.k = poor.mpi)
     mylist <- survey::svybys(survey::make.formula("mpi.k"), bys = survey::make.formula(subgroup), data, survey::svymean)
 
-    H <- lapply(mylist, FUN = function(x) mpitb.measure(x, data))
+    H <- lapply(mylist, FUN = function(x) mpitb.measurebys(x, data))
 
     names(H) <- subgroup
 

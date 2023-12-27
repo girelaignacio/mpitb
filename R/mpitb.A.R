@@ -28,7 +28,7 @@ mpitb.A.mpitb_set <- function(object, ...){
     data <- update.survey.design(data, score.k = censored.score, mpi.k = poor.mpi)
     mylist <- survey::svybys(survey::make.formula("score.k"), survey::make.formula(subgroup), design = subset(data, data$variables[,'mpi.k']==1), survey::svymean)
 
-    A <- lapply(mylist, FUN = function(x) mpitb.measure(x, data))
+    A <- lapply(mylist, FUN = function(x) mpitb.measurebys(x, data))
 
     names(A) <- subgroup
 

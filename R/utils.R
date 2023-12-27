@@ -1,4 +1,4 @@
-mpitb.measure <- function(X, data){
+mpitb.measurebys <- function(X, data){
   # Retrieve coefficients ####
   x <- stats::coef(X)
 
@@ -20,12 +20,12 @@ mpitb.measure <- function(X, data){
   return(x)
 }
 
-as.data.frame.mpitb_est <- function(x, row.names = NULL, optional = FALSE, ...) {
-  list.measures <- lapply(x, FUN = as.data.frame)
-  # add column with names of the measure
-  mpitb_est.df <- do.call("rbind", list.measures)
-  mpitb_est.df
-}
+# as.data.frame.mpitb_est <- function(x, row.names = NULL, optional = FALSE, ...) {
+#   list.measures <- lapply(x, FUN = as.data.frame)
+#   # add column with names of the measure
+#   mpitb_est.df <- do.call("rbind", list.measures)
+#   mpitb_est.df
+# }
 
 convert.to.data.frame_columns <- function(X) {
   # Create subgroups columns ####
@@ -45,7 +45,7 @@ convert.to.data.frame_columns <- function(X) {
   col.lb <- unlist(sapply(X, FUN = function(x) attr(x,"lb")), use.names = F)
   col.ub <- unlist(sapply(X, FUN = function(x) attr(x,"ub")), use.names = F)
   dataframe.k <- cbind(dataframe.k,col.coeff, col.se, col.lb, col.ub)
-  colnames(dataframe.k) <- c("Subgroup","Level","Indicator","Cut-off","Coefficient","Standard Error","Lower Bound", "Upper Bound")
+  colnames(dataframe.k) <- c("subgroup","level","indicator","k","coefficient","se","lb", "ub")
   return(dataframe.k)
 }
 
@@ -68,7 +68,7 @@ convert.to.data.frame_rows <- function(X) {
   col.lb <- unlist(sapply(X, FUN = function(x) attr(x,"lb")), use.names = F)
   col.ub <- unlist(sapply(X, FUN = function(x) attr(x,"ub")), use.names = F)
   dataframe.k <- cbind(dataframe.k,col.coeff, col.se, col.lb, col.ub)
-  colnames(dataframe.k) <- c("Subgroup","Level","Cut-off","Coefficient","Standard Error","Lower Bound", "Upper Bound")
+  colnames(dataframe.k) <- c("subgroup","level","k","coefficient","se","lb", "ub")
   return(dataframe.k)
 }
 

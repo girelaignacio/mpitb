@@ -42,7 +42,7 @@ mpitb.M0.mpitb_set <- function(object, ...){
     #by.list <- survey::svybys(survey::make.formula("score.k"), bys = survey::make.formula(subgroup), data, survey::svymean)
     by.list <- survey::svybys(survey::make.formula("score.k"), bys = survey::make.formula(subgroup), data, survey::svyciprop, vartype = c("se","ci"))
 
-    M0 <- lapply(by.list, FUN = function(x) mpitb.measure(x, data))
+    M0 <- lapply(by.list, FUN = function(x) mpitb.measurebys(x, data))
 
     names(M0) <- subgroup
     attr(M0, "k") <- k*100

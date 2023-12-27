@@ -30,12 +30,13 @@ confint.mpitb_measure <- function(object, parm, level, ...){
 
   stopifnot("`confint` method only available for `parm = 'coefficient'`" = parm == "coefficient")
 
-  #cutoffs <- retrieve.cutoffs(object)
+  cutoffs <- retrieve.cutoffs(object)
 
-  #b <- retrieve.coefficients(object)
+  b <- retrieve.coefficients(object)
 
+  # Confidence intervals assumming t-student
   #se <- retrieve.se(object)
-
+  #
   #degfs <- retrieve.df(object)
   #alpha <- 1-level
   #t.score <- stats::qt(p=alpha/2, df=degfs-1,lower.tail=FALSE)
