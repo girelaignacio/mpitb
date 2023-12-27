@@ -26,9 +26,9 @@ mpitb.A.mpitb_set <- function(object, ...){
     poor.mpi <- as.factor(ifelse(score >= k,1,0))
     censored.score <- censored.deprivations.score(score, k)
     data <- update.survey.design(data, score.k = censored.score, mpi.k = poor.mpi)
-    mylist <- survey::svybys(survey::make.formula("score.k"), survey::make.formula(subgroup), design = subset(data, data$variables[,'mpi.k']==1), survey::svymean)
+    by.list <- survey::svybys(survey::make.formula("score.k"), survey::make.formula(subgroup), design = subset(data, data$variables[,'mpi.k']==1), survey::svyciprop, vartype = c("se","ci"))
 
-    A <- lapply(mylist, FUN = function(x) mpitb.measurebys(x, data))
+    A <- lapply(by.list, FUN = function(x) mpitb.measurebys(x, data))
 
     names(A) <- subgroup
 
@@ -37,7 +37,7 @@ mpitb.A.mpitb_set <- function(object, ...){
     attr(A, "k") <- k*100
     output[[i]] <- A
   }
-  attr(output, "Year") <- object$year
+  attr(output, "time") <- object$time
   class(output) <- c("mpitb_A", "mpitb_measure")
   output
 }

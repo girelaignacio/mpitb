@@ -108,6 +108,7 @@ mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL, ti
   # Add "Total" column. Treated as a subgroup.
   data[,"Total"] <- "Total"
 
+
   # Create the deprivations and weighted deprivations matrix ####
   # G0 <- matrix: Deprivation Matrix
   G0 <- G0.matrix(data, indicators)
