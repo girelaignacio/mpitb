@@ -25,9 +25,9 @@
 #'
 #' # Asumme we want to calculate M0 measure
 #'
-#' M0<- mpitb.measure(set, measure = c("M0"))
+#' M0<- mpitb.measure(set, measure = "M0")
 
-mpitb.measure.mpitb_set <- function(object, measure = c("M0","H","A","censored.headcounts","headcounts"), ...) UseMethod("mpitb.measure", object)
+mpitb.measure <- function(object, ...) UseMethod("mpitb.measure", object)
 
 #' @rdname mpitb.measure
 #' @export
