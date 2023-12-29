@@ -2,7 +2,7 @@
 title: "mpitb: A toolbox for calculating multidimensional poverty indices in R"
 date: "2023-12-31"
 abstract: >
-  This article presents \pkg{mpitb}, an R package for calculating multidimensional poverty indices (MPIs) based on the popular Alkire-Foster measurement approach. \pkg{mpitb} package provides a tractable and extensive framework for researchers, analysts, and practitioners working on mutltidimensional poverty measurement projects in the same vein of the well-known global MPI workflow.
+  This article presents \pkg{mpitb}, an R package for calculating multidimensional poverty indices (MPIs) based on the popular Alkire-Foster (AF) measurement approach. \pkg{mpitb} package provides a tractable and extensive framework for researchers, analysts, and practitioners working on mutltidimensional poverty measurement projects in the same vein of the well-known global MPI workflow. The toolbox mainly consists of providing methods for estimating AF measures such that they can be easily manipulated. In this way, users can concentrate on the very analysis of results. Furthermore, this package accounts for the complex survey design of micro data which is of key relevance in the analysis of estimated measures using statistical inference. 
 draft: true
 author:  
   # see ?rjournal_article for more information
@@ -15,6 +15,8 @@ author:
     orcid: 0000-0003-3297-3854
     email:  ignacio.girela@unc.edu.ar
 type: package
+header-includes:
+  - \usepackage{blkarray}
 output: 
   rjtools::rjournal_pdf_article:
     self_contained: yes
@@ -33,21 +35,61 @@ library(palmerpenguins)
 
 # Introduction
 
-Although poverty is widely understood as the inability to achieve basic standards of living, the measurement of poverty has traditionally been based on monetary deficits. However, over the past two decades, there has been a significant increase in the use of multidimensional approaches to measuring poverty in an attempt to capture different dimensions of this phenomenon. In this context, the dual-cut-off-counting measurement approach proposed by @af11 (AF, hereafter) has become particularly popular due to its flexibility and ability to inform policy. For example, the AF method is the basis of the global Multidimensional Poverty Index (MPI) which is yearly published by the United Nations Development Programme (UNDP) and the Oxford Poverty and Human Development Initiative (OPHI) [@gMPI-report2022]. In addition, many countries are developing their own official MPIs to track poverty reduction progress using the AF method. 
+Although poverty is widely understood as the inability to basic living standards multidimensional well-being status, the measurement of poverty has traditionally been based on monetary deficits. Over the past two decades, there has been a significant increase in the use of multidimensional approaches to measuring poverty in an attempt to capture the complexity of this phenomenon. In this context, the dual-cut-off-counting measurement approach proposed by @af11 (AF, hereafter) has become particularly popular due to its flexibility and ability to inform policy. For example, the AF method is the basis of the global Multidimensional Poverty Index (MPI) which is yearly published by the United Nations Development Programme (UNDP) and the Oxford Poverty and Human Development Initiative (OPHI) [@gMPI-report2022]. In addition, many countries are developing their own official MPIs to track poverty reduction progress using the AF method. 
 
-This measurement approach stands out both for providing an extensive policy information platform and remaining relatively understandable by the general public. In other words, AF measures point estimates entail simple algebraic operations. Some R packages that computes AF measures include \CRANpkg{MPI} [@MPIpkg] and \CRANpkg{mpindex} [@mpindexpkg]. Notwithstanding, these packages do not account for the complex survey design of micro data and, as a result, assume the data was obtained through a simple random sampling which is barely the case of household surveys. Certainly, not considering the complex survey design affects further statistical inference exercises of interest. Namely, is multidimensional poverty in one subgroup of the population greater than another? Has poverty been reduced over time?
+This measurement approach stands out both for providing an extensive policy information platform and remaining relatively understandable by the general public. In other words, AF measures point estimates entail simple algebraic operations. Some R packages that computes AF measures include \CRANpkg{MPI} [@MPIpkg] and \CRANpkg{mpindex} [@mpindexpkg]. Notwithstanding, these packages do not account for the complex survey design of micro data and, as a result, assume the data was obtained through a simple random sampling. Rarely is this the case of household surveys. Not considering the complex survey design affects further statistical inference exercises of interest. Namely, is multidimensional poverty in one subgroup of the population greater than another? Has poverty been reduced over time?
 
-Therefore, calculating AF measures in practice is still a challenging task. For this reason OPHI launched a Stata package [@mpitb_Stata] with the aim of providing a framework that mirrors the production process of the well-known global MPI to researchers, analysts and practitioners. To do so, @mpitb_Stata (continue...).
-This package adapts this framework for R users.
+Therefore, calculating AF measures in practice is still a challenging task. For this reason OPHI launched a Stata package with the aim of providing a integrated framework that mirrors the estimation process of the well-known global MPI to researchers, analysts and practitioners [@mpitb_Stata]. In a nutshell, this package provides a set of subcommands for estimating key quantities. Not only AF measures but also their standard errors (considering sampling design) and confidence intervals. These quantities are not usually reported in poverty studies, however, they are for statistical inference. Thus, users can focus on the analysis of results. 
 
+With the aim of adapting this framework for R users, I developed the \CRANpkg{mpitb} package.  
 
-<!-- Despite the increasing popularity of this approach, calculating AF measures in practice is still a challenging task due to the lack of an integrated framework on how to generate, analyse and present various poverty estimates together.  Motivated by this problem, OPHI launched a Stata package [@mpitb_Stata] with the aim of providing a framework that mirrors the production process of the well-known global MPI to researchers, analysts and practitioners. To do so, @mpitb_Stata (continue...). -->
-<!-- This package adapts this framework for R users. -->
-
-<!-- Calculating AF measures point estimates underlies simple algebraic operations. Indeed, R packages that computes AF measures include \CRANpkg{MPI} [@MPIpkg] and \CRANpkg{mpindex} [@mpindexpkg]. Notwithstanding, these packages do not account for the complex survey designs from where data are drawn. This issue affects the estimation of the standard errors and, consequently, impacts further statistical inference exercises of interest. Namely, is multidimensional poverty in one subgroup of the population greater than another? Has poverty been reduced over time? -->
+The remainder of this paper is organized as follows. 
 
 # Measuring multidimensional poverty: the Alkire-Foster Method
 
+@af11 proposed a flexible approach to measure multidimensional poverty that can be tailored to different contexts and policy purposes. It mainly distinguishes for its "dual cutoff counting approach" for identification and aggregation of the poor [for a detailed description, see @alkire2015multidimensional]. Calculating a multidimensional poverty index (MPI) based on this method can be summarized in the following steps:
+\begin{enumerate}
+\item Determine a set of dimensions of poverty $\mathcal{D}$ that are considered relevant for human development in a specific context (e.g., the global MPI chooses dimensions of health, education, and living standards, but other dimensions can be chosen depending on the context and goals).
+\item Select $d$ indicators that represents deprivations in each dimension (e.g., child mortality and malnutrition are the two indicators that represents health dimension in the global MPI).  
+\item Assign weights to each dimension and indicator, reflecting their relative importance where $w_j$ is represents the weight of the $j$-th indicator for $j = 1,\ldots,d$. In practice, indicators in each dimension are weighted equally such that $\sum_{j=1}^d w_j = 1$.
+\item Set the indicators deprivation cutoffs, which define the minimum level of achievement required to be considered non-deprived in each indicator (e.g., the global MPI uses cutoffs of having at least five years of schooling, having access to electricity, etc., but different thresholds can be set reflecting desired standards). 
+\item Apply the deprivations cutoff vector to each of the $n$ observations (individuals or households) and build the $n \times d$ deprivation matrix $\mathbf{D}$. Each element $\mathbf{d}_{ij}$ of this matrix is a binary variable. If $\mathbf{d}_{ij} = 1$, the $i$-th observation is deprived in indicator $j$, and the opposite if $\mathbf{d}_{ij} = 0$. 
+
+For illustrative purposes, assume that we a sample of 5 people and we set 3 dimensions (health, education and living standards). The first dimension is represented by an indicator of nutrition (N). The second by years of schooling (YS) and the third by a housing quality indicator (H) and having access to drinkable water (W). 
+\[ \mathbf{D} = 
+\begin{blockarray}{cccc}
+N & YS & H & W \\
+\begin{block}{(cccc)}
+  1 & 1 & 0 & 1 \\
+  0 & 1 & 0 & 0 \\
+  0 & 0 & 1 & 0 \\
+  0 & 1 & 0 & 1 \\
+  0 & 0 & 0 & 0 \\
+\end{block}
+\end{blockarray}
+\]
+
+In this case, the first person is deprived simultaneously in N, YS and W indicators.
+
+\item Identify who is poor by counting the number and proportion of deprivations that each person or household faces in the selected indicators. For example, you can use the global MPI poverty cutoff of 33.3%, which means that a person or household is poor if they are deprived in at least one third of the weighted indicators.
+
+\[ \mathbf{D} = 
+\begin{blockarray}{ccccc}
+CM & N & YS & H \\
+\begin{block}{(cccc)c}
+  1 & 1 & 0 & 1 & f \\
+  0 & 1 & 0 & 0 & g \\
+  0 & 0 & 1 & 0 & h \\
+  0 & 1 & 0 & 1 & i \\
+  0 & 0 & 0 & 0 & j \\
+\end{block}
+\end{blockarray}
+\]
+\item Calculate the incidence of poverty (H), which is the percentage of the population that is poor according to the previous step.
+\item Calculate the intensity of poverty (A), which is the average percentage of deprivations that the poor experience. For example, if the poor are deprived in 40% of the weighted indicators on average, then A = 0.4.
+\item Calculate the adjusted headcount ratio (M0), which is the product of the incidence and the intensity of poverty. This is the most commonly used MPI measure, as it reflects both the extent and the depth of multidimensional poverty. M0 = H x A.
+\item Optionally, you can also calculate other MPI measures that capture the severity and the inequality of poverty, such as the adjusted poverty gap (M1) and the adjusted squared poverty gap (M2). These measures require cardinal data and additional calculations of the gap and the squared gap between the level of deprivation and the poverty cutoff for each indicator.
+\end{enumerate} 
 
 # Overview of \pkg{mpitb} package
 
@@ -55,7 +97,9 @@ This package adapts this framework for R users.
 
 # Applications
 
-@mpitb_Stata provide a set of examples on a synthetic data set following a common household survey structure. With the view of consistency, all applied examples herebelow are based on the same data.
+@mpitb_Stata provide a set of examples on a synthetic data set following a common household survey structure. With the view of consistency, all applied examples here below are based on the same data.
+
+## Estimate AF measures for a single county
 
 ```{r penguins-alison, eval=FALSE, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "}
 knitr::include_graphics("penguins.png")
@@ -105,4 +149,4 @@ In this paper, we introduced a package for calculating multidimensional poverty 
 
 # Acknowledgements
 
-I want to thank 
+I would like to express my sincere thanks both to Rodrigo García Arancibia and José M. Vargas, my mentors, for their invaluable guidance, feedback, and encouragement throughout the development of this package. I also wish to acknowledge Nicolai Suppa for his generous support and enthusiasm in adapting his Stata package to R users. Without his constructive suggestions this package would not have been possible. Finally, I would like to thank every instructor from the OPHI Summer School 2022 for their throughout lectures on multidimensional poverty analysis and the provision of the Stata source code which mainly motivated the development of this R package. 
