@@ -3,6 +3,4 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^paper$
-^example\.R$
-^extra\.R$
 ^cran-comments\.md$
