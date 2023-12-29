@@ -5,6 +5,7 @@
 #' @param weights A numerical vector representing the weights of each indicator. Should have the same length as `indicators` vector. Should sum up to 1. Default sets the same weight to each indicator
 #' @param K A numerical vector representing the poverty cut-offs. Should be values between 1 and 100. Default is 1, i.e., deprivations are not censored.
 #' @param subgroup A character vector containing the names of the populations subgroup of interest. This character vector should belong to columns names of `data`.
+#' @param level Confidence level for interval. By default, 0.95.
 #' @param year A character variable withe the name of the column in `data` containing information about the year (e.g. 2013) for analysis of changes over time.
 #' @param time A character variable with the name of the column in `data` containing information about temporal information for analysis of changes over time.
 #' @param name A character variable in which it can be specified a name for the project.
@@ -28,8 +29,9 @@
 #'       name = "Example", description = "SWZ MICS survey 2014")
 
 mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL,
-                      year = NULL, time = NULL,
+                      level = 0.95, year = NULL, time = NULL,
                       name = "Unnamed project", description = "No description") {
+  #### Catch call ####
   this.call <- match.call()
   # Print this call so that the user can check if arguments are correctly assigned
   print(this.call)
@@ -89,6 +91,14 @@ mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL,
     } else {subgroup <- c("Total")}
   # Coerce as factor!
 
+    ### `level` argument
+      ## check if `level` is numeric
+  stopifnot("`level` should be `numeric`" = is.numeric(level))
+      ## check if `level` is between 0 and 1
+  stopifnot("`level` argument out of bounds" = level > 0 & level < 1)
+  if (level < 0.90) warning("`level` is below 0.90. Not a typical value")
+
+
     ### `year` argument
   if (!is.null(year)) {
       ## check if `year` is `character`
@@ -98,7 +108,8 @@ mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL,
       ## check if `year` is in `data` colnames()
     stopifnot("At least one subgroup not found in `data`" = year %in% colnames(data))
       ## check if `year` has more than 1 value
-    n_year <- unique(data$variables[,year])
+    year <- unique(data$variables[,year])
+    stopifnot("More than one year value in data. Data must be subset by year for changes over time estimations " = length(year) == 1)
   }
 
     ### `time` argument
@@ -110,7 +121,7 @@ mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL,
       ## check if `time` is in `data` colnames()
     stopifnot("At least one subgroup not found in `data`" = time %in% colnames(data))
       ## check if `year` has more than 1 value
-    n_year <- unique(data$variables[,year])
+    time <- unique(data$variables[,time])
   }
       ## check incompatibilities between `year` and `time`
 
@@ -135,16 +146,15 @@ mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL,
     ### With this notation, for calculations, "Total" is treated as a subgroup.
   data[ , "Total"] <- "Total"
 
-
-  # Create the deprivations and weighted deprivations matrix ####
-  # G0 <- matrix: Deprivation Matrix
+  #### Fundamental operations from operations.R ####
+    ### Create the deprivations and weighted deprivations matrix
+      ## G0 <- matrix: Deprivation Matrix
   G0 <- G0.matrix(data, indicators)
-  # G0_w <- matrix: Weighted Deprivation Matrix
+      ## G0_w <- matrix: Weighted Deprivation Matrix
   G0_w <- weighted.G0.matrix(G0, weights)
-
-  # Calculate the deprivations score ####
+    ### Calculate the deprivations score
   deprivations.score <- deprivations.score(G0_w)
-  # add deprivations score to survey variables data frame
+    ### Add deprivations score to survey variables data frame (see utils.R)
   data <- update.survey.design(data, score = deprivations.score)
 
   #### Define names, class and attributes ####
@@ -155,8 +165,10 @@ mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL,
 
   attr(set, "description") <- description
 
-  set$year <- unique(year)
-  set$time <- unique(time)
+  attr(set, "level") <- level
+
+  set$year <- as.factor(year)
+  set$time <- as.factor(time)
 
   set$indicators <- indicators
 

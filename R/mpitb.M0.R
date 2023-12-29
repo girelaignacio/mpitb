@@ -33,6 +33,7 @@ mpitb.M0.mpitb_set <- function(object, ...){
   subgroup <- object$subgroup
   score <- data$variables$score
   K <- object$K
+  level <- attr(object, "level")
   output <- vector("list", length = length(K))
   for (i in 1:length(K)){
     k <- K[i]/100
@@ -40,7 +41,7 @@ mpitb.M0.mpitb_set <- function(object, ...){
     data <- update.survey.design(data, score.k = censored.score)
 
     #by.list <- survey::svybys(survey::make.formula("score.k"), bys = survey::make.formula(subgroup), data, survey::svymean)
-    by.list <- survey::svybys(survey::make.formula("score.k"), bys = survey::make.formula(subgroup), data, survey::svyciprop, vartype = c("se","ci"))
+    by.list <- survey::svybys(survey::make.formula("score.k"), bys = survey::make.formula(subgroup), data, survey::svyciprop, vartype = c("se","ci"), level = level)
 
     M0 <- lapply(by.list, FUN = function(x) mpitb.measurebys(x, data))
 

@@ -20,12 +20,12 @@ mpitb.headcounts.mpitb_set <- function(object, censored = FALSE, ...) {
   data <- object$data
   subgroup <- object$subgroup
   indicators <- object$indicators
-
+  level <- attr(object, "level")
   if (censored == FALSE) {
     #### Calculate uncensored indicators headcount ratio
     output <- vector("list", length = 1)
 
-    by.list <- survey::svybys(survey::make.formula(indicators), bys = survey::make.formula(subgroup),data, survey::svyciprop, vartype = c("se","ci"))
+    by.list <- survey::svybys(survey::make.formula(indicators), bys = survey::make.formula(subgroup),data, survey::svyciprop, vartype = c("se","ci"), level = level)
 
     Hj <- lapply(by.list, FUN = function(x) mpitb.measurebys(x, data))
     names(Hj) <- subgroup
@@ -50,7 +50,7 @@ mpitb.headcounts.mpitb_set <- function(object, censored = FALSE, ...) {
         cens.data[, indicators] <- cens.G0
           ####
 
-        by.list <- survey::svybys(survey::make.formula(indicators), bys = survey::make.formula(subgroup), cens.data, survey::svyciprop, vartype = c("se","ci"))
+        by.list <- survey::svybys(survey::make.formula(indicators), bys = survey::make.formula(subgroup), cens.data, survey::svyciprop, vartype = c("se","ci"), level = level)
 
         Hj <- lapply(by.list, FUN = function(x) mpitb.measurebys(x, cens.data))
         names(Hj) <- subgroup
