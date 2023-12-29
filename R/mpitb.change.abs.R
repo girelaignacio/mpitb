@@ -11,12 +11,21 @@ mpitb.change.abs <- function(mpitb_measure_t1, mpitb_measure_t2){
   }
 
   absolute.change <- function(t1,t2) {
-    change <- t2 - t1
-    attr(change,"se") <- sqrt(attr(t2,"se")^2 + attr(t1,"se")^2)
-    attr(change, "k") <- attr(mpitb_measure_t1,"k")
+    b <- t2 - t1
+    attributes(b) <- NULL
+    change <- b
+    se <- sqrt(attr(t2,"se")^2 + attr(t1,"se")^2)
+    attr(change,"se") <- se
+    attr(change, "lb") <- b - qnorm(0.975) * se
+    attr(change, "ub") <- b + qnorm(0.975) * se
+    names(change) <- names(t1)
     return(change)
   }
-  mapply.abs.change <- function(t1,t2) mapply(absolute.change, t1,t2)
+  mapply.abs.change <- function(t1,t2) {
+    abs.change <- mapply(absolute.change, t1,t2)
+    attr(abs.change,"k") <- attr(t1,"k")
+    return(abs.change)
+  }
 
   absolute.change <- mapply(mapply.abs.change, mpitb_measure_t1, mpitb_measure_t2, SIMPLIFY=FALSE)
 

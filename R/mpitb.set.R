@@ -5,9 +5,10 @@
 #' @param weights A numerical vector representing the weights of each indicator. Should have the same length as `indicators` vector. Should sum up to 1. Default sets the same weight to each indicator
 #' @param K A numerical vector representing the poverty cut-offs. Should be values between 1 and 100. Default is 1, i.e., deprivations are not censored.
 #' @param subgroup A character vector containing the names of the populations subgroup of interest. This character vector should belong to columns names of `data`.
-#' @param time A character object with the name of the column in `data` containing information about temporal information for analysis of changes over time.
-#' @param name A character object in which it can be specified a name for the project.
-#' @param description A character object in which it can be specified a brief description for the project.
+#' @param year A character variable withe the name of the column in `data` containing information about the year (e.g. 2013) for analysis of changes over time.
+#' @param time A character variable with the name of the column in `data` containing information about temporal information for analysis of changes over time.
+#' @param name A character variable in which it can be specified a name for the project.
+#' @param description A character variable in which it can be specified a brief description for the project.
 #' @param ... other arguments
 #'
 #' @return `mpitb_set` object
@@ -26,7 +27,8 @@
 #' set <- mpitb.set(data, indicators, weights, cutoff, subgroup,
 #'       name = "Example", description = "SWZ MICS survey 2014")
 
-mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL, time = NULL,
+mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL,
+                      year = NULL, time = NULL,
                       name = "Unnamed project", description = "No description") {
   this.call <- match.call()
   # Print this call so that the user can check if arguments are correctly assigned
@@ -83,19 +85,34 @@ mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL, ti
       ## check if `indicators` are in `data` colnames()
     stopifnot("At least one subgroup not found in `data`" = subgroup %in% colnames(data))
     subgroup <- c("Total", subgroup)
-    # The total observations in the data are interpreted as a subgroup
+    # The total observations in the data are interpreted as a subgroup.
     } else {subgroup <- c("Total")}
   # Coerce as factor!
 
     ### `year` argument
-  if (!is.null(time)) {
-    ## check if `year` is `character`
-    stopifnot("`time` should be a `character`" = is.character(time))
-    ## check if `year` is of length 1
-    stopifnot("`time` should be one element (the column of out data that contains information about the year)" = length(time) == 1)
-    ## check if `year` is in `data` colnames()
-    stopifnot("At least one subgroup not found in `data`" = time %in% colnames(data))
+  if (!is.null(year)) {
+      ## check if `year` is `character`
+    stopifnot("`year` should be a `character`" = is.character(year))
+      ## check if `year` is of length 1
+    stopifnot("`time` should be one element (the column of out data that contains information about the year)" = length(year) == 1)
+      ## check if `year` is in `data` colnames()
+    stopifnot("At least one subgroup not found in `data`" = year %in% colnames(data))
+      ## check if `year` has more than 1 value
+    n_year <- unique(data$variables[,year])
   }
+
+    ### `time` argument
+  if (!is.null(time)) {
+      ## check if `time` is `character`
+    stopifnot("`time` should be a `character`" = is.character(time))
+      ## check if `time` is of length 1
+    stopifnot("`time` should be one element (the column of out data that contains information about the year)" = length(time) == 1)
+      ## check if `time` is in `data` colnames()
+    stopifnot("At least one subgroup not found in `data`" = time %in% colnames(data))
+      ## check if `year` has more than 1 value
+    n_year <- unique(data$variables[,year])
+  }
+      ## check incompatibilities between `year` and `time`
 
     ### `name` argument
       ## check if `year` is `character`
@@ -106,13 +123,17 @@ mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL, ti
   stopifnot("`description` should be a `character`" = is.character(description))
 
   #### Treat missing values ####
-  missings <- apply(X = data$variables[,indicators], MARGIN = 2, FUN = function(x) sum(is.na(x)))
+  missings <- apply(X = data$variables[, indicators], MARGIN = 2, FUN = function(x) sum(is.na(x)))
   if (sum(missings) != 0){
     warning("There are missing values in certain indicators. By default, rows with missing indicators are dropped and standard errors cannot be calculated")
     }
 
-  # Add "Total" column. Treated as a subgroup.
-  data[,"Total"] <- "Total"
+  #### Add "Total" column to calculate overall AF measures ####
+    ### Note that "Total" is the equivalent to "nat" in mpitb STATA
+    ### Since estimations over the whole deprivations matrix are not necessary
+    ### national (may be a province, state, region) here we denoted "Total".
+    ### With this notation, for calculations, "Total" is treated as a subgroup.
+  data[ , "Total"] <- "Total"
 
 
   # Create the deprivations and weighted deprivations matrix ####
@@ -134,9 +155,11 @@ mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL, ti
 
   attr(set, "description") <- description
 
+  set$year <- unique(year)
   set$time <- unique(time)
 
   set$indicators <- indicators
+
   set$K <- K
 
   set$weights <- weights

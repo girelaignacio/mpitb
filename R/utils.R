@@ -27,7 +27,7 @@ mpitb.measurebys <- function(X, data){
 #   mpitb_est.df
 # }
 
-convert.to.data.frame_columns <- function(X) {
+convert.to.data.frame.bycolumn <- function(X) {
   # Create subgroups columns ####
   len.levels <- sapply(X, FUN = function(x) length(x))
   subg.names <- names(sapply(X, FUN = function(x) length(x)))
@@ -49,7 +49,7 @@ convert.to.data.frame_columns <- function(X) {
   return(dataframe.k)
 }
 
-convert.to.data.frame_rows <- function(X) {
+convert.to.data.frame.byrow <- function(X) {
   # Create subgroups columns ####
   len.levels <- sapply(X, FUN = function(x) length(x))
   subg.names <- names(sapply(X, FUN = function(x) length(x)))

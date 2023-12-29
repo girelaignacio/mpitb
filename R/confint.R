@@ -1,9 +1,9 @@
 #' Extract the confident intervals from the calculated measures
 #'
 #' @param object an object of class `mpitb_measure`.
-#' @param parm "coefficient"
-#' @param level numeric
-#' @param ... other arguments
+#' @param parm "coefficient". Confidence intervals are only available for AF measure point estimates.
+#' @param level the confidence level required.
+#' @param ... additional argument(s) for methods.
 #'
 #' @export
 #'
@@ -21,7 +21,6 @@
 #'       name = "Example", desc = "SWZ MICS survey 2014")
 #'
 #' M0 <- mpitb.M0(set)
-#' as.data.frame(M0)
 #'
 #' confint(M0, parm = "coefficient", level = 0.95)
 

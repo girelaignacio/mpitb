@@ -32,6 +32,7 @@ mpitb.measure <- function(object, ...) UseMethod("mpitb.measure", object)
 #' @rdname mpitb.measure
 #' @export
 mpitb.measure.mpitb_set <- function(object, measure = c("M0","H","A","censored.headcounts","headcounts"), ...){
+    measure <- match.arg(measure)
     selected.measure <- switch(measure,
                                M0 = mpitb.M0(object),
                                H = mpitb.H(object),

@@ -31,7 +31,7 @@ mpitb.H.mpitb_set <- function(object, ...){
 
     names(H) <- subgroup
 
-    H <- lapply(H, "*",100)
+    #H <- lapply(H, "*",100)
 
     attr(H, "k") <- k*100
     output[[i]] <- H
