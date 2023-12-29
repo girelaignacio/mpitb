@@ -11,6 +11,7 @@ mpitb.set(
   K = 1,
   ...,
   subgroup = NULL,
+  year = NULL,
   time = NULL,
   name = "Unnamed project",
   description = "No description"
@@ -29,11 +30,13 @@ mpitb.set(
 
 \item{subgroup}{A character vector containing the names of the populations subgroup of interest. This character vector should belong to columns names of `data`.}
 
-\item{time}{A character object with the name of the column in `data` containing information about temporal information for analysis of changes over time.}
+\item{year}{A character variable withe the name of the column in `data` containing information about the year (e.g. 2013) for analysis of changes over time.}
 
-\item{name}{A character object in which it can be specified a name for the project.}
+\item{time}{A character variable with the name of the column in `data` containing information about temporal information for analysis of changes over time.}
 
-\item{description}{A character object in which it can be specified a brief description for the project.}
+\item{name}{A character variable in which it can be specified a name for the project.}
+
+\item{description}{A character variable in which it can be specified a brief description for the project.}
 }
 \value{
 `mpitb_set` object
