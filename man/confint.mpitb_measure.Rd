@@ -9,11 +9,11 @@
 \arguments{
 \item{object}{an object of class `mpitb_measure`.}
 
-\item{parm}{"coefficient"}
+\item{parm}{"coefficient". Confidence intervals are only available for AF measure point estimates.}
 
-\item{level}{numeric}
+\item{level}{the confidence level required.}
 
-\item{...}{other arguments}
+\item{...}{additional argument(s) for methods.}
 }
 \description{
 Extract the confident intervals from the calculated measures
@@ -32,7 +32,6 @@ set <- mpitb.set(data, indicators, weights, cutoff, over,
       name = "Example", desc = "SWZ MICS survey 2014")
 
 M0 <- mpitb.M0(set)
-as.data.frame(M0)
 
 confint(M0, parm = "coefficient", level = 0.95)
 }

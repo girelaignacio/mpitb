@@ -11,6 +11,7 @@ mpitb.set(
   K = 1,
   ...,
   subgroup = NULL,
+  level = 0.95,
   year = NULL,
   time = NULL,
   name = "Unnamed project",
@@ -29,6 +30,8 @@ mpitb.set(
 \item{...}{other arguments}
 
 \item{subgroup}{A character vector containing the names of the populations subgroup of interest. This character vector should belong to columns names of `data`.}
+
+\item{level}{Confidence level for interval. By default, 0.95.}
 
 \item{year}{A character variable withe the name of the column in `data` containing information about the year (e.g. 2013) for analysis of changes over time.}
 

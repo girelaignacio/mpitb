@@ -1,13 +1,19 @@
-#' Adjusted Headcount Ratio (M0)
+#' Adjusted Headcount Ratio (\eqn{M_0})
 #'
-#' Calculate the Adjusted Headcount Ratio (M0 Alkire-Foster class measure)
+#' @description
+#' Calculate the Adjusted Headcount Ratio (\eqn{M_0})
+#' \deqn{M_0 = \frac{1}{n} \sum_{i=1}^n c_i(k) = \frac{q}{n} \times \frac{1}{q} \sum_{i=1}^n c_i(k) = H \times A} where  \eqn{c_i(k) = \sum_{j=1}^d w_j d_{ij}(k)} is the censored deprivation score
+#' for each observation, \eqn{n} is the total number of observations, and \eqn{q} is the number of people identified as multidimensional poor.
 #'
-#' @param object `mpitb_set` object
+#' @param object a \code{mpitb_set} class object.
 #' @param ... other arguments
 #'
-#' @return `mpitb_M0` and `mpitb_measure` class
+#' @return \code{mpitb_M0} and \code{mpitb_measure} class objects
 #'
 #' @export
+#'
+#' @references \emph{Alkire, S., Foster, J. E., Seth, S., Santos, M. E., Roche, J., & Ballon, P. (2015). Multidimensional poverty measurement and analysis. Oxford University Press.}
+#'
 #' @rdname mpitb.M0
 #'
 #' @examples
@@ -23,6 +29,8 @@
 #'       name = "Example", desc = "SWZ MICS survey 2014")
 #'
 #' M0 <- mpitb.M0(set)
+#'
+#' ## to observe the results in a data.frame format
 #' as.data.frame(M0)
 mpitb.M0 <- function(object, ...) UseMethod("mpitb.M0", object)
 

@@ -3,7 +3,7 @@
 \name{mpitb.A}
 \alias{mpitb.A}
 \alias{mpitb.A.mpitb_set}
-\title{Intensity (A)}
+\title{Intensity of poverty (\eqn{A})}
 \usage{
 mpitb.A(object, ...)
 
@@ -18,5 +18,27 @@ mpitb.A(object, ...)
 `mpitb_A` and `mpitb_measure` class
 }
 \description{
-Calculates the Intensity of poverty or the average deprivation score of the multidimensionally poor people
+Calculates the intensity of poverty (\eqn{A}) which the average deprivation score of the people identified as multidimensional poor, i.e.,
+is the sum of the \eqn{n} censored deprivations scores (\eqn{c_i(k)}) divided by the number of multidimensional poor people (\eqn{q}).
+\deqn{A = \frac{1}{q} \sum_{i=1}^{n} c_i(k) }
+}
+\examples{
+library(mpitb)
+data <- survey::svydesign(id=~PSU, weights = ~Weight, strata = ~Strata,
+        data = swz_mics14)
+indicators <- c("Water","Assets","School","Nutrition")
+weights <- c(1/6,1/6,1/3,1/3)
+cutoff <- c(25,50)
+subgroup <- c("Region","Area")
+
+set <- mpitb.set(data, indicators, weights, cutoff, subgroup,
+      name = "Example", desc = "SWZ MICS survey 2014")
+
+A <- mpitb.A(set)
+
+## to observe the results in a data.frame format
+as.data.frame(A)
+}
+\references{
+\emph{Alkire, S., Foster, J. E., Seth, S., Santos, M. E., Roche, J., & Ballon, P. (2015). Multidimensional poverty measurement and analysis. Oxford University Press.}
 }
