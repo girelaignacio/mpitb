@@ -2,7 +2,7 @@
 title: "mpitb: A toolbox for calculating multidimensional poverty indices in R"
 date: "2023-12-31"
 abstract: >
-  This article presents \pkg{mpitb}, an R package for calculating multidimensional poverty indices (MPIs) based on the popular Alkire-Foster (AF) measurement approach. \pkg{mpitb} package provides a tractable and extensive framework for researchers, analysts, and practitioners working on mutltidimensional poverty measurement projects in the same vein of the well-known global MPI workflow. The toolbox mainly consists of providing methods for estimating AF measures such that they can be easily manipulated. In this way, users can concentrate on the very analysis of results. Furthermore, this package accounts for the complex survey design of micro data which is of key relevance in the analysis of estimated measures using statistical inference. 
+  This article presents \pkg{mpitb}, an R package for calculating multidimensional poverty indices (MPIs) based on the popular Alkire-Foster (AF) measurement approach. \pkg{mpitb} package provides a tractable and extensive framework for researchers, analysts, and practitioners working on mutltidimensional poverty measurement projects in the same vein of the well-known global MPI workflow. The toolbox mainly consists of providing methods for estimating AF measures such that they can be easily manipulated. In this way, users can concentrate on the very analysis of results. Furthermore, this package accounts for the complex survey design of micro data which is of key relevance in statistical inference of the estimates. A demonstration about the usage of \pkg{mpitb} package with a synthetic data which has a typical household survey design.
 draft: true
 author:  
   # see ?rjournal_article for more information
@@ -48,16 +48,33 @@ The remainder of this paper is organized as follows.
 
 # Measuring multidimensional poverty: the Alkire-Foster Method
 
-@af11 proposed a flexible approach to measure multidimensional poverty that can be tailored to different contexts and policy purposes. It mainly distinguishes for its "dual cutoff counting approach" for identification of the poor [for a detailed description, see @alkire2015multidimensional]. Calculating a multidimensional poverty index (MPI) based on this method can be summarized in the following steps:
+@af11 proposed a flexible approach to measure multidimensional poverty that can be tailored to different contexts and policy purposes. Throughout an multidimensional povery index (MPI) construction process it is possible to distinguish the \textbf{identification} and \textbf{aggregation} steps [for a detailed description, see @alkire2015multidimensional]. Flexibility feature of this method derived from the so-called ``dual cutoff counting approach" for identifying the poor and the possibility to build the MPI by aggregating different partial measures. 
+
+### Identification step
 \begin{enumerate}
 \item Determine a set of dimensions of poverty $\mathcal{D}$ that are considered relevant for human development in a specific context (e.g., the global MPI chooses dimensions of health, education, and living standards, but other dimensions can be chosen depending on the context and goals).
 \item Select $d$ indicators that represents deprivations in each dimension (e.g., child mortality and malnutrition are the two indicators that represents health dimension in the global MPI).  
 \item Assign weights to each dimension and indicator, reflecting their relative importance where $w_j$ is represents the weight of the $j$-th indicator for $j = 1,\ldots,d$. In practice, indicators in each dimension are weighted equally such that $\sum_{j=1}^d w_j = 1$.
 \item Set the indicators deprivation cutoffs, which define the minimum level of achievement required to be considered non-deprived in each indicator (e.g., the global MPI uses cutoffs of having at least five years of schooling, having access to electricity, etc., but different thresholds can be set reflecting desired standards). 
-\item Apply the deprivations cutoff vector to each of the $n$ observations (individuals or households) and build the $n \times d$ deprivation matrix $\mathbf{D}$. Each element $\mathbf{d}_{ij}$ of this matrix is a binary variable. If $\mathbf{d}_{ij} = 1$, the $i$-th observation is deprived in indicator $j$, and the opposite if $\mathbf{d}_{ij} = 0$. 
+\item Apply the deprivations cutoff vector to each of the $n$ observations (individuals or households) and build the $n \times d$ deprivation matrix $\mathbf{g^0}$. Each element $\mathbf{g^0}_{ij}$ of this matrix is a binary variable. If $\mathbf{g^0}_{ij} = 1$, the $i$-th observation is deprived in indicator $j$, and the opposite if $\mathbf{g^0}_{ij} = 0$. 
+\item Build the weighted deprivation matrix assigning the corresponding weight to each indicator and calculate the deprivations score for each observation $c_i$, which is the weighted sum of the deprivations $c_i = \sum_{j=1}^d w_j d_ij$.
+\item Identify who is poor by setting a unique poverty cutoff $k$ meaning the minimum proportion of weighted deprivations a household needs to experience to be considered multidimensional poor. This cutoff is compared with the deprivations score. Therefore, if $c_i \geq k$, the person is multidimensional poor (e.g., the global MPI uses a cutoff $k$ of 33.3\% or 1/3 which means that a person is poor if it is deprived in one-third or more of the weighted indicators).
+\item Censor data of the non-poor and get the so-called censored (weighted) deprivation matrix ($\mathbf{\bar{g}^0}(k)$), and censored deprivations scores ($c(k)$), where $c_i(k) = c_i$ if $c_i \geq k $, and $c_i(k) = 0$ otherwise.
+\end{enumerate}
 
-For illustrative purposes, assume that we a sample of 5 people and we set 3 dimensions (health, education and living standards). The first dimension is represented by an indicator of nutrition (N). The second by years of schooling (YS) and the third by a housing quality indicator (H) and having access to drinkable water (W). 
-\[ \mathbf{D} = 
+### Aggregation step
+
+There are two different aggregation procedures from matrix $\mathbf{\bar{g}^0}(k)$ depending on the order of aggregation (by rows and then by columnss o fir by columns and then by rows.)
+
+\begin{enumerate}
+\item Compute the MPI, also known as Adjusted Headcount Ratio ($M_0$), by taking the mean of the censored deprivation score ($c_(k)$):
+\[M_0 = \sum_{i=1}^n c_i(k) \]
+\end{enumerate}
+
+### Illustrative example
+
+Assume that we a sample of 5 people and we set 3 dimensions (health, education and living standards). The first dimension is represented by an indicator of nutrition (N). The second by years of schooling (YS) and the third by a housing quality indicator (H) and having access to drinkable water (W). 
+\[ \mathbf{g^0} = 
 \begin{blockarray}{cccc}
 N & YS & H & W \\
 \begin{block}{(cccc)}
@@ -72,11 +89,11 @@ N & YS & H & W \\
 
 In this case, the first person is deprived simultaneously in N, YS and W indicators.
 
-\item Build the weighted deprivation matrix assigning the corresponding weight to each indicator and calculate the deprivations score for each observation $c_i$, which is the weighted sum of the deprivations $c_i = \sum_{j=1}^d w_j d_ij$.
+
 
 In our latter example, assume that all dimensions are equally weighted (a weight of $1/3$) and within each dimension indicators have proportionally equal weights (i.e., N and YS weight $1/3$, whereas H and W $1/6$.)
 
-\[ \mathbf{D} = 
+\[ \mathbf{\bar{g}^0} = 
 \begin{blockarray}{ccccc}
 N & YS & H & W & \bf{c}\\
 \begin{block}{(cccc)c}
@@ -86,28 +103,30 @@ N & YS & H & W & \bf{c}\\
   0 & 1/3 & 0 & 1/6 & 3/6\\
   0 & 0 & 0 & 0 & 0\\
 \end{block}
+  a & b & c & d & 
 \end{blockarray}
 \]
+In our example, assume that we set $k = 1/3$. Hence, 
 
-\item Identify who is poor by counting the number and proportion of deprivations that each person or household faces in the selected indicators. For example, you can use the global MPI poverty cutoff of 33.3%, which means that a person or household is poor if they are deprived in at least one third of the weighted indicators.
-
-\[ \mathbf{D} = 
+\[ \mathbf{\bar{g}^0}(k) = 
 \begin{blockarray}{ccccc}
-CM & N & YS & H \\
+N & YS & H & W & \bf{c(k)}\\
 \begin{block}{(cccc)c}
-  1 & 1 & 0 & 1 & f \\
-  0 & 1 & 0 & 0 & g \\
-  0 & 0 & 1 & 0 & h \\
-  0 & 1 & 0 & 1 & i \\
-  0 & 0 & 0 & 0 & j \\
+  1/3 & 1/3 & 0 & 1/6 & 5/6\\
+  0 & 1/3 & 0 & 0 & 1/3\\
+  0 & 0 & 0 & 0 & 0\\
+  0 & 1/3 & 0 & 1/6 & 3/6\\
+  0 & 0 & 0 & 0 & 0\\
 \end{block}
 \end{blockarray}
 \]
-\item Calculate the incidence of poverty (H), which is the percentage of the population that is poor according to the previous step.
-\item Calculate the intensity of poverty (A), which is the average percentage of deprivations that the poor experience. For example, if the poor are deprived in 40% of the weighted indicators on average, then A = 0.4.
-\item Calculate the adjusted headcount ratio (M0), which is the product of the incidence and the intensity of poverty. This is the most commonly used MPI measure, as it reflects both the extent and the depth of multidimensional poverty. M0 = H x A.
-\item Optionally, you can also calculate other MPI measures that capture the severity and the inequality of poverty, such as the adjusted poverty gap (M1) and the adjusted squared poverty gap (M2). These measures require cardinal data and additional calculations of the gap and the squared gap between the level of deprivation and the poverty cutoff for each indicator.
-\end{enumerate} 
+
+Note that the third and fifth person are censored from the analysis and three people are identified as poor. 
+
+(continue ...)
+
+(continue ...)
+
 
 # Overview of \pkg{mpitb} package
 
@@ -119,9 +138,9 @@ CM & N & YS & H \\
 
 ## Estimate AF measures for a single county
 
-```{r penguins-alison, eval=FALSE, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "}
-knitr::include_graphics("penguins.png")
-```
+<!-- # ```{r penguins-alison, eval=FALSE, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "} -->
+<!-- # knitr::include_graphics("penguins.png") -->
+<!-- # ``` -->
 
 ```{r library, echo = TRUE}
 library(mpitb)
@@ -133,33 +152,33 @@ data <- subset(data, t == 1)
 
 
 
-Table `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(tab:penguins-tab-interactive)', '\\@ref(tab:penguins-tab-static)'))` prints at the first few rows of the `penguins` data:
+<!-- Table `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(tab:penguins-tab-interactive)', '\\@ref(tab:penguins-tab-static)'))` prints at the first few rows of the `penguins` data: -->
 
-```{r penguins-tab-interactive, eval = knitr::is_html_output(), layout = "l-body-outset"}
-knitr::kable(head(penguins), format = "html", caption = "A basic table")
-```
+<!-- ```{r penguins-tab-interactive, eval = knitr::is_html_output(), layout = "l-body-outset"} -->
+<!-- knitr::kable(head(penguins), format = "html", caption = "A basic table") -->
+<!-- ``` -->
 
-```{r penguins-tab-static, eval = knitr::is_latex_output()}
-knitr::kable(head(penguins), format = "latex", caption = "A basic table") %>% 
-  kableExtra::kable_styling(font_size = 7)
-```   
+# ```{r penguins-tab-static, eval = knitr::is_latex_output()}
+# knitr::kable(head(penguins), format = "latex", caption = "A basic table") %>% 
+#   kableExtra::kable_styling(font_size = 7)
+# ```   
 
-Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:penguins-plotly)', '\\@ref(fig:penguins-ggplot)'))` shows an `r ifelse(knitr::is_html_output(), 'interactive', '')` plot of the penguins data, made using the `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\CRANpkg{plotly}', '\\CRANpkg{ggplot2}'))` package. 
+<!-- Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:penguins-plotly)', '\\@ref(fig:penguins-ggplot)'))` shows an `r ifelse(knitr::is_html_output(), 'interactive', '')` plot of the penguins data, made using the `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\CRANpkg{plotly}', '\\CRANpkg{ggplot2}'))` package.  -->
 
-```{r penguins-plotly, echo = TRUE, fig.height = 5, fig.cap="A basic interactive plot made with the plotly package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. When hovering on a point, a tooltip will show the exact value of the bill depth and length for that point, along with the species name.", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "A scatterplot of bill length against bill depth, both measured in millimetre. The three species are shown in different colours and loosely forms three clusters. Adelie has small bill length and large bill depth, Gentoo has small bill depth but large bill length, and Chinstrap has relatively large bill depth and bill length."}
-p <- penguins %>% 
-  ggplot(aes(x = bill_depth_mm, y = bill_length_mm, 
-             color = species)) + 
-  geom_point()
-ggplotly(p)
-```
+# ```{r penguins-plotly, echo = TRUE, fig.height = 5, fig.cap="A basic interactive plot made with the plotly package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. When hovering on a point, a tooltip will show the exact value of the bill depth and length for that point, along with the species name.", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "A scatterplot of bill length against bill depth, both measured in millimetre. The three species are shown in different colours and loosely forms three clusters. Adelie has small bill length and large bill depth, Gentoo has small bill depth but large bill length, and Chinstrap has relatively large bill depth and bill length."}
+# p <- penguins %>% 
+#   ggplot(aes(x = bill_depth_mm, y = bill_length_mm, 
+#              color = species)) + 
+#   geom_point()
+# ggplotly(p)
+# ```
 
-```{r penguins-ggplot, echo = TRUE, fig.height = 5, fig.cap="A basic non-interactive plot made with the ggplot2 package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. Visit the online article to access the interactive version made with the plotly package.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()}
-penguins %>% 
-  ggplot(aes(x = bill_depth_mm, y = bill_length_mm, 
-             color = species)) + 
-  geom_point()
-```
+# ```{r penguins-ggplot, echo = TRUE, fig.height = 5, fig.cap="A basic non-interactive plot made with the ggplot2 package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. Visit the online article to access the interactive version made with the plotly package.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()}
+# penguins %>% 
+#   ggplot(aes(x = bill_depth_mm, y = bill_length_mm, 
+#              color = species)) + 
+#   geom_point()
+# ```
 
 # Summary
 

@@ -11,16 +11,16 @@
 #' @return \code{mpitb_change} and \code{mpitb_measure} class object
 #' @export
 #'
-#' @rdname  mpitb.change_abs.ann
+#' @rdname  mpitb.change_abs_ann
 #'
 #' @references \emph{Alkire, S., Roche, J. M., & Vaz, A. (2017). Changes over time in multidimensional poverty: Methodology and results for 34 countries. World Development, 94, 232-249}. 10.1016/j.worlddev.2017.01.011
 #'
 #' @examples
-mpitb.change_abs.ann <- function(period_t1, period_t2, ...) UseMethod(" mpitb.change_abs.ann")
+mpitb.change_abs_ann <- function(period_t1, period_t2, ...) UseMethod("mpitb.change_abs_ann")
 
 #' @rdname  mpitb.change_abs.ann
 #' @export
-mpitb.change_abs.ann <- function(period_t1, period_t2, ...){
+mpitb.change_abs_ann.default <- function(period_t1, period_t2, ...){
 
   # .check if they are from the same mpitb_measure
   if(all(class(period_t1) != class(period_t2))){

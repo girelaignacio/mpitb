@@ -4,7 +4,7 @@
 #' Calculate the annualized relative rate of an AF measure (e.g. \eqn{M_0}) which is the compound rate of reduction in per year between the initial and the final periods.
 #' \deqn{\bar{\delta}(M_0)= \left[ \left( \frac{M_0^{t^2}}{M_0^{t^1}} \right)^{\frac{1}{t^2 - t^1}} - 1 \right] \times 100 }
 #'
-#' @param period_t2 an \code{mpitb_measure} class object.
+#' @param period_t1 a \code{mpitb_measure} class object.
 #' @param period_t2 a \code{mpitb_measure} class object. Should be the same AF measure class as `period_t1` with the same parameters (cutoffs, subgroups, etc.).
 #'
 #' @return \code{mpitb_change} and \code{mpitb_measure} class object
@@ -13,14 +13,14 @@
 #'
 #' @references \emph{Alkire, S., Roche, J. M., & Vaz, A. (2017). Changes over time in multidimensional poverty: Methodology and results for 34 countries. World Development, 94, 232-249}. 10.1016/j.worlddev.2017.01.011
 #'
-#' @rdname  mpitb.change_rel.ann
+#' @rdname  mpitb.change_rel_ann
 #'
 #' @examples
-mpitb.change_rel.ann <- function(period_t1, period_t2, ...) UseMethod(" mpitb.change_rel.ann")
+mpitb.change_rel_ann <- function(period_t1, period_t2, ...) UseMethod(" mpitb.change_rel_ann")
 
-#' @rdname  mpitb.change_rel.ann
+#' @rdname  mpitb.change_rel_ann
 #' @export
-mpitb.change_rel.ann.default <- function(period_t1, period_t2){
+mpitb.change_rel_ann.default <- function(period_t1, period_t2){
 
   # .check if they are from the same mpitb_measure
   if(all(class(period_t1) != class(period_t2))){
