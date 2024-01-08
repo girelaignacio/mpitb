@@ -6,7 +6,10 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of this package is to introduce …
+Here it is provided a package for estimating multidimensional poverty
+measures based on the Alkire-Foster method which mirrors the estimation
+procedures of the original mpitb Stata package. This file consists of a
+brief explanation of some the main functions and how to use it.
 
 ## Installation
 
@@ -16,19 +19,8 @@ You can install the development version of mpitb from
 ``` r
 # install.packages("devtools")
 devtools::install_github("girelaignacio/mpitb")
-#> Downloading GitHub repo girelaignacio/mpitb@HEAD
-#> 
-#> ── R CMD build ─────────────────────────────────────────────────────────────────
-#>       ✔  checking for file 'C:\Users\girel\AppData\Local\Temp\RtmpMfe535\remotes19345ebc2bfa\girelaignacio-mpitb-3e3901e/DESCRIPTION'
-#>       ─  preparing 'mpitb': (1.9s)
-#>    checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
-#>       ─  checking for LF line-endings in source and make files and shell scripts
-#>   ─  checking for empty or unneeded directories
-#>       ─  building 'mpitb_0.2.0.tar.gz'
-#>      
-#> 
-#> Installing package into 'C:/Users/girel/AppData/Local/R/win-library/4.3'
-#> (as 'lib' is unspecified)
+#> Skipping install of 'mpitb' from a github remote, the SHA1 (69c73b67) has not changed since last install.
+#>   Use `force = TRUE` to force installation
 ```
 
 This process may take time the first time.
@@ -114,13 +106,13 @@ cutoff <- c(25)
 subgroup <- c("Region","Area")
 set <- mpitb.set(data, indicators, weights, cutoff, subgroup, name = "SWZ2014 Example", desc = "This is an example taken from the OPHI Summer School 2022")
 #> mpitb.set(data = data, indicators = indicators, weights = weights, 
-#>     K = cutoff, subgroup = subgroup, name = "SWZ2014 Example", 
-#>     description = "This is an example taken from the OPHI Summer School 2022")
+#>     K = cutoff, subgroup, desc = "This is an example taken from the OPHI Summer School 2022", 
+#>     name = "SWZ2014 Example")
 print(set)
 #> --- Specification --- 
 #>  Name:  SWZ2014 Example 
-#>  Weighting scheme:  equal 
-#>  Description:  This is an example taken from the OPHI Summer School 2022 
+#>  Weighting scheme:  
+#>  Description:  No description 
 #> 
 #> --- Survey design --- 
 #> 20739 observations
@@ -130,16 +122,10 @@ print(set)
 #>     desc = "This is an example taken from the OPHI Summer School 2022")
 #> 
 #> --- Parameters ---
-#>  Cut-offs:  1 ( 0.25 )
+#>  Cut-offs:  1 ( 25 )
 #>  Indicators:  4 
 #> 
 #> --- Number of subgroups ---
-#> Region : 4 levels
-#> 
-#> 
-#> Area : 2 levels
-#> 
-#> 
 #> No missing values found
 ```
 
@@ -182,46 +168,21 @@ standard errors as an `atribute` of that element.
 M0
 #> [[1]]
 #> [[1]]$Total
-#>      Total 
-#> 0.09782088 
-#> attr(,"over")
-#> [1] "Total"
-#> attr(,"se")
-#>       Total 
-#> 0.005230329 
-#> attr(,"df")
-#> Total 
-#>   339 
-#> 
-#> [[1]]$Region
-#>     Hhohho    Manzini Shiselweni    Lubombo 
-#> 0.08441687 0.07104974 0.13478863 0.13006382 
-#> attr(,"over")
-#> [1] "Region"
-#> attr(,"se")
-#>      Hhohho     Manzini  Shiselweni     Lubombo 
-#> 0.008838600 0.007811974 0.008313157 0.015928619 
-#> attr(,"df")
-#>     Hhohho    Manzini Shiselweni    Lubombo 
-#>         95         96         78         70 
-#> 
-#> [[1]]$Area
-#>      Urban      Rural 
-#> 0.03109217 0.12149484 
-#> attr(,"over")
-#> [1] "Area"
-#> attr(,"se")
-#>       Urban       Rural 
-#> 0.006592045 0.006279293 
-#> attr(,"df")
-#> Urban Rural 
-#>    86   253 
+#>   level coefficient          se         lb        ub
+#> 1 Total  0.09782088 0.005230329 0.08800425 0.1086021
 #> 
 #> attr(,"k")
 #> [1] 25
 #> 
+#> attr(,"year")
+#> factor()
+#> Levels: 
+#> attr(,"level")
+#> [1] 0.95
 #> attr(,"class")
 #> [1] "mpitb_M0"      "mpitb_measure"
+#> attr(,"call")
+#> mpitb.M0.mpitb_set(object = set)
 ```
 
 This is quite ugly but necessary for controlling objects. Since the
@@ -239,13 +200,8 @@ the user). Here is an example:
 ``` r
 M0.results <- as.data.frame(M0)
 head(M0.results)
-#>     Over      Level Cut-off Coefficient Standard Error
-#> 1  Total      Total      25  0.09782088    0.005230329
-#> 2 Region     Hhohho      25  0.08441687    0.008838600
-#> 3 Region    Manzini      25  0.07104974    0.007811974
-#> 4 Region Shiselweni      25  0.13478863    0.008313157
-#> 5 Region    Lubombo      25  0.13006382    0.015928619
-#> 6   Area      Urban      25  0.03109217    0.006592045
+#>   subgroup level  k coefficient          se         lb        ub
+#> 1    Total Total 25  0.09782088 0.005230329 0.08800425 0.1086021
 ```
 
 Other typical R methods are included such as `coef()` and `confint()` to
@@ -254,23 +210,11 @@ poverty measures, respectively.
 
 ``` r
 coef(M0)
-#>                   Cut-offs Coefficient
-#> Total.Total             25  0.09782088
-#> Region.Hhohho           25  0.08441687
-#> Region.Manzini          25  0.07104974
-#> Region.Shiselweni       25  0.13478863
-#> Region.Lubombo          25  0.13006382
-#> Area.Urban              25  0.03109217
-#> Area.Rural              25  0.12149484
+#>   subgroup level  k coefficient
+#> 1    Total Total 25  0.09782088
 confint(M0, parm = "coefficient", level = 0.95)
-#>                   Cut-offs Lower Bound (95%) Upper Bound (95%)
-#> Total.Total             25        0.08753278        0.10810897
-#> Region.Hhohho           25        0.06686762        0.10196612
-#> Region.Manzini          25        0.05554101        0.08655847
-#> Region.Shiselweni       25        0.11823502        0.15134224
-#> Region.Lubombo          25        0.09828709        0.16184054
-#> Area.Urban              25        0.01798542        0.04419893
-#> Area.Rural              25        0.10912826        0.13386142
+#>   Subgroup Level Cutoff Lower Bound (95%) Upper Bound (95%)
+#> 1    Total Total     25             0.088             0.109
 ```
 
 In addition, if the user wants to estimate all the measures at once,

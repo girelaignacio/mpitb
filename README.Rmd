@@ -18,7 +18,8 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of this package is to introduce ...
+Here it is provided a package for estimating multidimensional poverty measures based on the Alkire-Foster method which mirrors the estimation procedures of the original mpitb Stata package. This file consists of a brief explanation of some the main functions and how to use it.
+
 
 ## Installation
 
