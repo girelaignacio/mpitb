@@ -34,7 +34,11 @@ coef.mpitb_measure <- function(object, k = NULL, over = NULL, level = NULL, ...)
     x <- x[,c("subgroup","level","k","indicator","coefficient")]
   }else{x <- x[,c("subgroup","level","k","coefficient")]}
 
-
+  format.perc<-function (x, digits) {
+    format(x, trim = TRUE,
+           scientific = FALSE, digits = digits)
+  }
+  x$coefficient <- format.perc(x$coefficient, 3)
   # # check if `over`is character and unique
   # if (!is.null(over)){
   #   coeffs <- subset(coeffs, grepl(over, rownames(coeffs)))
