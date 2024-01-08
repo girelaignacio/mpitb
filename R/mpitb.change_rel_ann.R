@@ -6,6 +6,7 @@
 #'
 #' @param period_t1 a \code{mpitb_measure} class object.
 #' @param period_t2 a \code{mpitb_measure} class object. Should be the same AF measure class as `period_t1` with the same parameters (cutoffs, subgroups, etc.).
+#' @param ... other arguments
 #'
 #' @return \code{mpitb_change} and \code{mpitb_measure} class object
 #'
@@ -43,8 +44,8 @@ mpitb.change_rel_ann.default <- function(period_t1, period_t2){
     se <- 100 * sqrt((attr(t2,"se")^2/t1^2)+((attr(t1,"se")^2*t2^2)/(t1^4))) * (1/dyt)
     attributes(se) <- NULL
     attr(change,"se") <- se
-    attr(change, "lb") <- b - qnorm(0.975) * se
-    attr(change, "ub") <- b + qnorm(0.975) * se
+    attr(change, "lb") <- b - stats::qnorm(0.975) * se
+    attr(change, "ub") <- b + stats::qnorm(0.975) * se
     names(change) <- names(t1)
     return(change)
   }
@@ -54,7 +55,7 @@ mpitb.change_rel_ann.default <- function(period_t1, period_t2){
     return(ann.rel.change)
   }
 
-  annualized.relative.change <- mapply(mapply.rel.abs.change, period_t1, period_t2, SIMPLIFY=FALSE)
+  annualized.relative.change <- mapply(mapply.ann.rel.change, period_t1, period_t2, SIMPLIFY=FALSE)
 
   class(annualized.relative.change) <- c("mpitb_change", "mpitb_measure")
 

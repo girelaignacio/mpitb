@@ -48,9 +48,10 @@ mpitb.A.mpitb_set <- function(object, ...){
     poor.mpi <- as.factor(ifelse(score >= k,1,0))
     censored.score <- censored.deprivations.score(score, k)
     data <- update.survey.design(data, score.k = censored.score, mpi.k = poor.mpi)
-    by.list <- survey::svybys(survey::make.formula("score.k"), survey::make.formula(subgroup), design = subset(data, data$variables[,'mpi.k']==1), survey::svyciprop, vartype = c("se","ci"), level = level)
+    svyby.list <- survey::svybys(survey::make.formula("score.k"), survey::make.formula(subgroup), design = subset(data, data$variables[,'mpi.k']==1), survey::svyciprop, vartype = c("se","ci"), level = level)
 
-    A <- lapply(by.list, FUN = function(x) mpitb.measurebys(x, data))
+    #A <- lapply(by.list, FUN = function(x) mpitb.measurebys(x, data))
+    A <- lapply(svyby.list, reduce.svyby)
 
     names(A) <- subgroup
 

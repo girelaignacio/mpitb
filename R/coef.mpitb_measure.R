@@ -27,23 +27,23 @@
 
 coef.mpitb_measure <- function(object, k = NULL, over = NULL, level = NULL, ...) {
 
-  cutoffs <- retrieve.cutoffs(object)
 
-  coeffs <- retrieve.coefficients(object)
+  x <- as.data.frame(object)
 
-  out <- cbind(cutoffs,coeffs)
-  colnames(out) <- c("Cut-offs", "Coefficient")
+  if ("indicator" %in% colnames(x)){
+    x <- x[,c("subgroup","level","k","indicator","coefficient")]
+  }else{x <- x[,c("subgroup","level","k","coefficient")]}
 
 
-  # check if `over`is character and unique
-  if (!is.null(over)){
-    coeffs <- subset(coeffs, grepl(over, rownames(coeffs)))
-  }
+  # # check if `over`is character and unique
+  # if (!is.null(over)){
+  #   coeffs <- subset(coeffs, grepl(over, rownames(coeffs)))
+  # }
+  #
+  # # check if `level`is character and unique
+  # if(!is.null(level)){
+  #   coeffs <- subset(coeffs, grepl(level, rownames(coeffs)))
+  # }
 
-  # check if `level`is character and unique
-  if(!is.null(level)){
-    coeffs <- subset(coeffs, grepl(level, rownames(coeffs)))
-  }
-
-  return(out)
+  return(x)
 }

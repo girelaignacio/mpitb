@@ -59,6 +59,8 @@ mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL,
       ## check if `indicators` are in `data` colnames()
   stopifnot("At least one indicator is not found in `data`" = indicators %in% colnames(data))
 
+
+
     ### `weights` argument
       ## check if `weights` missing argument
   if (missing(weights)) {
@@ -156,6 +158,11 @@ mpitb.set <- function(data, indicators, weights, K = 1, ..., subgroup = NULL,
   deprivations.score <- deprivations.score(G0_w)
     ### Add deprivations score to survey variables data frame (see utils.R)
   data <- update.survey.design(data, score = deprivations.score)
+  ### convert indicators as factor and check if they have more than one level
+  # for (i in indicators) {
+  #   data$variables[,i] <- as.factor(data$variables[,i])
+  #   stopifnot("Indicators are not binary variables" = length(levels(data$variables[,i])) >= 2)
+  #   }
 
   #### Define names, class and attributes ####
   set <- list()

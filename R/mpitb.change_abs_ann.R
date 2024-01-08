@@ -42,8 +42,8 @@ mpitb.change_abs_ann.default <- function(period_t1, period_t2, ...){
     change <- b
     se <- (sqrt(attr(t2,"se")^2 + attr(t1,"se")^2)) * (1/dyt)
     attr(change,"se") <- se
-    attr(change, "lb") <- b - qnorm(0.975) * se
-    attr(change, "ub") <- b + qnorm(0.975) * se
+    attr(change, "lb") <- b - stats::qnorm(0.975) * se
+    attr(change, "ub") <- b + stats::qnorm(0.975) * se
     names(change) <- names(t1)
     return(change)
   }

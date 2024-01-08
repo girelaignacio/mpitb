@@ -49,15 +49,18 @@ mpitb.M0.mpitb_set <- function(object, ...){
     data <- update.survey.design(data, score.k = censored.score)
 
     #by.list <- survey::svybys(survey::make.formula("score.k"), bys = survey::make.formula(subgroup), data, survey::svymean)
-    by.list <- survey::svybys(survey::make.formula("score.k"), bys = survey::make.formula(subgroup), data, survey::svyciprop, vartype = c("se","ci"), level = level)
+    svyby.list <- survey::svybys(survey::make.formula("score.k"), bys = survey::make.formula(subgroup), data, survey::svyciprop, vartype = c("se","ci"), level = level)
 
-    M0 <- lapply(by.list, FUN = function(x) mpitb.measurebys(x, data))
+    #M0 <- lapply(by.list, FUN = function(x) mpitb.measurebys(x, data))
+    M0 <- lapply(svyby.list, reduce.svyby)
 
     names(M0) <- subgroup
     attr(M0, "k") <- k*100
     output[[i]] <- M0
   }
   attr(output, "year") <- object$year
+  attr(output, "level") <- attr(object, "level")
   class(output) <- c("mpitb_M0", "mpitb_measure")
+  attr(output, "call") <- match.call()
   output
 }
